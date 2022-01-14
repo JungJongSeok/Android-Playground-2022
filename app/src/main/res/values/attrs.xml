@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ZoomEffectLayout">
+        <attr name="zoomPercent" format="float" />
+        <attr name="zoomDuration" format="integer" />
+    </declare-styleable>
+
+</resources>
