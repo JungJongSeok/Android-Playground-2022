@@ -43,7 +43,7 @@ android {
 
     buildTypes {
         debug {
-            
+            applicationIdSuffix ".playground2022"
             debuggable true
             shrinkResources false
             minifyEnabled false
@@ -53,6 +53,7 @@ android {
             /**
              * For apply proguard : shrinkResources true, minifyEnabled true
              */
+            applicationIdSuffix ".playground2022"
             debuggable false
             shrinkResources false
             minifyEnabled false
