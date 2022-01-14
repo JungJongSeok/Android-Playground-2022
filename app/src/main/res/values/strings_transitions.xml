@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation, ExtraTranslation">
+
+    <string name="marvel_private_key">e72f8a5d306b26669f9140e61bc448a4b6ccf9f3</string>
+    <string name="marvel_public_key">130e6d44391c4ceab320eeaecfa2f7f1</string>
+</resources>

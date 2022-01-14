@@ -1,0 +1,2 @@
+include ':app'
+rootProject.name = "안드로이드 기본 코드"
