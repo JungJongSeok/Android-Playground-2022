@@ -42,15 +42,6 @@ fun Int.toPx(): Int = (this * App.instance.resources.displayMetrics.density).toI
 
 fun Float.toPx(): Float = (this * App.instance.resources.displayMetrics.density)
 
-fun Context.getStatusBarHeight(): Int {
-    var result = 0
-    val resourceId = this.resources.getIdentifier("status_bar_height", "dimen", "android")
-    if (resourceId > 0) {
-        result = this.resources.getDimensionPixelOffset(resourceId)
-    }
-    return result
-}
-
 fun Boolean.toVisibleOrGone(): Int {
     return if (this) {
         View.VISIBLE
