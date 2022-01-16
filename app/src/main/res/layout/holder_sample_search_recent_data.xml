@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="property"
+            type="com.android.code.ui.sample.SampleSearchRecentAdapterProperty" />
+
+        <variable
+            name="isSelected"
+            type="Boolean" />
+
+        <variable
+            name="text"
+            type="String" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        app:cardCornerRadius="15dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@{isSelected ? @color/white : @color/black, default = @color/black}"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="8dp"
+            android:text="@{text}"
+            android:onClick="@{() -> property.search(text)}"
+            android:textColor="@{isSelected ? @color/black : @color/white, default = @color/white}"
+            tools:text="text" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="X"
+            android:textColor="@color/teal_200"
+            android:textSize="20dp"
+            android:paddingEnd="5dp"
+            android:onClick="@{() -> property.removeRecentSearch(text)}"
+            android:layout_gravity="end|center_vertical"
+            />
+    </androidx.cardview.widget.CardView>
+</layout>

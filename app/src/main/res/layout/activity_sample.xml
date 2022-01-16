@@ -4,17 +4,32 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="activity"
             type="com.android.code.ui.sample.SampleActivity" />
     </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.android.code.ui.views.CommonSwipeRefreshLayout
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/searchView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            app:iconifiedByDefault="false"
+            app:layout_constraintBottom_toTopOf="@id/refreshLayout"
+            app:layout_constraintTop_toTopOf="parent"
+            app:queryHint="@string/search_hint" />
+
+        <com.android.code.ui.views.CommonSwipeRefreshLayout
+            android:id="@+id/refreshLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/searchView"
             app:refreshListener="@{view -> activity.refresh(view)}">
 
             <androidx.recyclerview.widget.RecyclerView

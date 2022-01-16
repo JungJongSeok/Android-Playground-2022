@@ -3,7 +3,9 @@
 
     <string name="common_network_error">통신 중 에러가 발생하였습니다. 다시 시도해 주세요.</string>
 
-    <string name="search_hint">검색어를 입력하시오.</string>
+    <string name="search_hint">마블 영웅 이름을 입력하시오.</string>
+
+    <string name="search_recent">최근 검색어</string>
 
     <string name="sample_marvel_resource_format" translatable="false">%s.%s</string>
 </resources>
