@@ -45,7 +45,6 @@ abstract class BaseActivity<T : ViewDataBinding, F : BaseViewModel> : AppCompatA
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStatusBarColor()
         setTransition(isEnter = true)
         callAbstractFunc(savedInstanceState)
 
@@ -66,24 +65,6 @@ abstract class BaseActivity<T : ViewDataBinding, F : BaseViewModel> : AppCompatA
     override fun onBackPressed() {
         super.onBackPressed()
         setTransition(isEnter = false)
-    }
-
-    protected fun setStatusBarColor(isWhite: Boolean = true) {
-        val colorValue = ContextCompat.getColor(
-            this,
-            if (isWhite) {
-                R.color.color_ffffff
-            } else {
-                R.color.color_f5f5f5
-            }
-        )
-        colorValue.let {
-            window.statusBarColor = it
-        }
-    }
-
-    protected fun setStatusBarColor(@ColorInt colorCode: Int) {
-        window.statusBarColor = colorCode
     }
 
     private fun setTransition(isEnter: Boolean = true) {
@@ -107,13 +88,11 @@ abstract class BaseActivity<T : ViewDataBinding, F : BaseViewModel> : AppCompatA
     }
 
     private fun callAbstractFunc(savedInstanceState: Bundle?) {
-        initData()
         initView(savedInstanceState)
         setViewModelOutputs()
         setViewModelInputs()
     }
 
-    abstract fun initData()
     abstract fun initView(savedInstanceState: Bundle?)
     abstract fun setViewModelOutputs()
     abstract fun setViewModelInputs()

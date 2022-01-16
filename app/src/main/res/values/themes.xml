@@ -2,7 +2,7 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- screen -->
-        <item name="android:windowBackground">@color/color_f5f5f5</item>
+        <item name="android:windowBackground">@color/white</item>
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/purple_500</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
@@ -23,13 +23,5 @@
         <item name="android:includeFontPadding">false</item>
         <item name="android:colorEdgeEffect">@android:color/transparent</item>
     </style>
-
-    <style name="SplashTheme" parent="AppTheme">
-        <item name="windowNoTitle">true</item>
-        <item name="android:windowBackground">@drawable/splash_background</item>
-        <item name="android:windowDrawsSystemBarBackgrounds">false</item>
-    </style>
-
-    <!-- ToolTipDialog Theme -->
 
 </resources>

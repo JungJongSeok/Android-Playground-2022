@@ -2,12 +2,12 @@ package com.android.code.ui.sample
 
 import com.android.code.models.marvel.Result
 
-sealed class SampleData(val result: Result)
+sealed class SampleData(open val result: Result)
 
 data class SampleLeftData(
-    private val _result: Result
-) : SampleData(_result)
+    override val result: Result
+) : SampleData(result)
 
 data class SampleRightData(
-    private val _result: Result
-) : SampleData(_result)
+    override val result: Result
+) : SampleData(result)

@@ -5,7 +5,6 @@ import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
-import com.android.code.ui.views.ZoomEffectView
 
 object ViewBinding {
 
@@ -24,11 +23,5 @@ object ViewBinding {
         requestManager ?: return
 
         requestManager.load(url).into(imageView)
-    }
-
-    @JvmStatic
-    @BindingAdapter("zoomImage")
-    fun zoomImage(zoomEffectView: ZoomEffectView, view: View) {
-        zoomEffectView.zoomView = view
     }
 }

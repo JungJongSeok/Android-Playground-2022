@@ -26,9 +26,6 @@ class SampleActivity : BaseActivity<ActivitySampleBinding, SampleViewModel>() {
 
     override fun getLayoutResId(): Int = R.layout.activity_sample
 
-    override fun initData() {
-    }
-
     override fun initView(savedInstanceState: Bundle?) {
         binding.activity = this
 

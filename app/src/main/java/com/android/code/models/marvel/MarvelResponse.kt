@@ -11,7 +11,7 @@ data class SampleResponse(
     @SerializedName("offset")
     val offset: Int,
     @SerializedName("results")
-    val results: List<Result>,
+    val results: List<Result>?,
     @SerializedName("total")
     val total: Int
 )
@@ -38,7 +38,7 @@ data class Result(
     @SerializedName("thumbnail")
     val thumbnail: Thumbnail,
     @SerializedName("urls")
-    val urls: List<Url>
+    val urls: List<Url>?
 )
 
 data class Comics(
@@ -47,7 +47,7 @@ data class Comics(
     @SerializedName("collectionURI")
     val collectionURI: String,
     @SerializedName("items")
-    val items: List<ComicsMetaData>,
+    val items: List<ComicsMetaData>?,
     @SerializedName("returned")
     val returned: Int
 )
@@ -58,7 +58,7 @@ data class Events(
     @SerializedName("collectionURI")
     val collectionURI: String,
     @SerializedName("items")
-    val items: List<EventsMetaData>,
+    val items: List<EventsMetaData>?,
     @SerializedName("returned")
     val returned: Int
 )
@@ -128,3 +128,4 @@ data class StoryMetaData(
     @SerializedName("type")
     val type: String
 )
+
