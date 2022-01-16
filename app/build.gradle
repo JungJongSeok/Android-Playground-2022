@@ -59,7 +59,7 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt')
             proguardFiles file(PROGUARD_COMMON)
-            signingConfig signingConfigs.release
+            signingConfig signingConfigs.debug
         }
         buildTypes.each {
             it.buildConfigField "String", "SERVER_URL", SERVER_URL

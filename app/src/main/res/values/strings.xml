@@ -5,5 +5,5 @@
 
     <string name="search_hint">검색어를 입력하시오.</string>
 
-    <string name="sample_marvel_resource_format">%s.%s</string>
+    <string name="sample_marvel_resource_format" translatable="false">%s.%s</string>
 </resources>
