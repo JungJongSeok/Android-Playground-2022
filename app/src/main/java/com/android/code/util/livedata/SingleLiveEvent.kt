@@ -18,11 +18,11 @@ class SingleLiveEvent<T> : MutableLiveData<T>(), Consumer<T>, (T) -> Unit {
             Timber.w("base android app: Multiple observers registered but only one will be notified of changes.")
         }
         // Observe the internal MutableLiveData
-        super.observe(owner, { t ->
+        super.observe(owner) { t ->
             if (pending.compareAndSet(true, false)) {
                 observer.onChanged(t)
             }
-        })
+        }
     }
 
     @MainThread
@@ -47,10 +47,6 @@ class SingleLiveEvent<T> : MutableLiveData<T>(), Consumer<T>, (T) -> Unit {
     @MainThread
     fun call() {
         value = null
-    }
-
-    companion object {
-        private val TAG = "SingleLiveEvent"
     }
 
     override fun accept(value: T) {

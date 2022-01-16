@@ -11,12 +11,12 @@ data class SampleResponse(
     @SerializedName("offset")
     val offset: Int,
     @SerializedName("results")
-    val results: List<Result>?,
+    val results: List<MarvelResult>?,
     @SerializedName("total")
     val total: Int
 )
 
-data class Result(
+data class MarvelResult(
     @SerializedName("comics")
     val comics: Comics,
     @SerializedName("description")
@@ -128,4 +128,3 @@ data class StoryMetaData(
     @SerializedName("type")
     val type: String
 )
-
