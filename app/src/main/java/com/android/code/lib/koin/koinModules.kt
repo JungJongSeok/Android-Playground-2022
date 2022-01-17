@@ -2,6 +2,7 @@ package com.android.code.lib.koin
 
 import com.android.code.lib.network.MarvelService
 import com.android.code.models.repository.MarvelRepository
+import com.android.code.models.repository.MarvelRepositoryImpl
 import com.android.code.ui.main.MainViewModel
 import com.android.code.ui.search.SearchGridViewModel
 import com.android.code.ui.search.SearchStaggeredViewModel
@@ -18,7 +19,7 @@ val uiModule = module {
 }
 
 val repositoryModule = module {
-    factory { MarvelRepository(get(), get()) }
+    factory<MarvelRepository> { MarvelRepositoryImpl(get(), get()) }
 }
 
 val networkModule = module {

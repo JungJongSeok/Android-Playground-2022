@@ -9,14 +9,25 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.security.MessageDigest
 
-class MarvelRepository(
-    private val marvelService: MarvelService,
-    private val sharedPreferencesManager: SharedPreferencesManager
-) {
+interface MarvelRepository {
     suspend fun characters(
         nameStartsWith: String? = null,
         offset: Int = 0,
         limit: Int = 20,
+    ): BaseResponse<SampleResponse>
+
+    var recentGridSearchList: List<String>?
+    var recentStaggeredSearchList: List<String>?
+}
+
+class MarvelRepositoryImpl(
+    private val marvelService: MarvelService,
+    private val sharedPreferencesManager: SharedPreferencesManager
+): MarvelRepository {
+    override suspend fun characters(
+        nameStartsWith: String?,
+        offset: Int,
+        limit: Int,
     ): BaseResponse<SampleResponse> {
         val timestamp = System.currentTimeMillis()
         val hash = marvelHash(timestamp)
@@ -33,14 +44,14 @@ class MarvelRepository(
         }
     }
 
-    var recentGridSearchList: List<String>?
+    override var recentGridSearchList: List<String>?
         get() = sharedPreferencesManager.recentGridSearchList
         set(value) {
             sharedPreferencesManager.recentGridSearchList = value
         }
 
 
-    var recentStaggeredSearchList: List<String>?
+    override var recentStaggeredSearchList: List<String>?
         get() = sharedPreferencesManager.recentStaggeredSearchList
         set(value) {
             sharedPreferencesManager.recentStaggeredSearchList = value
