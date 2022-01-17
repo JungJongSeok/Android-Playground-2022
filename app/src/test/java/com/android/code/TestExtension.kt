@@ -5,7 +5,6 @@ import androidx.arch.core.executor.ArchTaskExecutor
 import androidx.arch.core.executor.TaskExecutor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.junit.jupiter.api.extension.AfterEachCallback
@@ -14,17 +13,15 @@ import org.junit.jupiter.api.extension.ExtensionContext
 
 @ExperimentalCoroutinesApi
 class CoroutinesTestExtension : BeforeEachCallback, AfterEachCallback {
-    private val mainThreadSurrogate = newSingleThreadContext("UI thread")
     /**
      * Set TestCoroutine dispatcher as main
      */
     override fun beforeEach(context: ExtensionContext?) {
-        Dispatchers.setMain(mainThreadSurrogate)
+        Dispatchers.setMain(Dispatchers.Unconfined)
     }
 
     override fun afterEach(context: ExtensionContext?) {
         Dispatchers.resetMain()
-        mainThreadSurrogate.close()
     }
 }
 

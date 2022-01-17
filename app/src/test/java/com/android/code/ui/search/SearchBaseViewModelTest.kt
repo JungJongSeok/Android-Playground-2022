@@ -7,11 +7,7 @@ import com.android.code.models.BaseResponse
 import com.android.code.models.marvel.MarvelResult
 import com.android.code.models.marvel.SampleResponse
 import com.android.code.models.repository.MarvelRepository
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -43,10 +39,7 @@ internal class SearchBaseViewModelTest {
                 offset: Int,
                 limit: Int
             ): BaseResponse<SampleResponse> {
-                return withContext(Dispatchers.IO) {
-                    delay(1000) // to simulate a heavy weight operations
-                    BaseResponse(sampleResponse)
-                }
+                return BaseResponse(sampleResponse)
             }
 
             override var recentGridSearchList: List<String>? = listOf("GRID")
@@ -60,44 +53,41 @@ internal class SearchBaseViewModelTest {
 
     @Test
     fun initData() {
-        runTest {
-            launch(Dispatchers.Main) {
-                val totalExecutionTime = measureTimeMillis {
-                    searchBaseViewModel.initData()
-                    assertEquals(searchBaseViewModel.responseData.getOrAwaitValue().first.size, 4)
-                }
-
-                println("initData() Total Time: $totalExecutionTime")
+        runBlocking {
+            val totalExecutionTime = measureTimeMillis {
+                searchBaseViewModel.initData()
+                assertEquals(searchBaseViewModel.responseData.getOrAwaitValue().first.size, 4)
             }
+
+            println("initData() Total Time: $totalExecutionTime")
         }
     }
 
     @Test
     fun search() {
-        runTest {
-            launch(Dispatchers.Main) {
-                val totalExecutionTime = measureTimeMillis {
-                    searchBaseViewModel.search("spi")
-                    assertEquals(searchBaseViewModel.searchedText.getOrAwaitValue(), "spi")
-                    searchBaseViewModel.search("spider-man")
-                    assertEquals(searchBaseViewModel.searchedText.getOrAwaitValue(), "spi")
-                    delay(1500)
-                    searchBaseViewModel.search("spider-man")
-                    assertEquals(searchBaseViewModel.searchedText.getOrAwaitValue(), "spider-man")
-                }
-
-                println("search() Total Time: $totalExecutionTime")
+        runBlocking {
+            val totalExecutionTime = measureTimeMillis {
+                searchBaseViewModel.search("spi")
+                assertEquals(searchBaseViewModel.searchedText.getOrAwaitValue(), "spi")
+                searchBaseViewModel.search("spider-man")
+                assertEquals(searchBaseViewModel.searchedText.getOrAwaitValue(), "spi")
+                delay(1000)
+                searchBaseViewModel.search("spider-man")
+                assertEquals(searchBaseViewModel.searchedText.getOrAwaitValue(), "spider-man")
             }
+
+            println("search() Total Time: $totalExecutionTime")
         }
     }
 
     @Test
     fun searchMore() {
-        runTest {
-            launch(Dispatchers.Main) {
+        runBlocking {
+            launch {
                 val totalExecutionTime = measureTimeMillis {
                     searchBaseViewModel.initData()
-                    delay(1000)
+                    assertEquals(searchBaseViewModel.responseData.getOrAwaitValue().first.size, 4)
+                    delay(500)
                     searchBaseViewModel.searchMore()
                     assertEquals(searchBaseViewModel.responseData.getOrAwaitValue().first.size, 7)
                 }
@@ -108,31 +98,40 @@ internal class SearchBaseViewModelTest {
     }
 
     @Test
-    fun removeRecentSearch() {
-        runTest {
-            launch(Dispatchers.Main) {
-                val totalExecutionTime = measureTimeMillis {
-                    searchBaseViewModel.removeRecentSearch("123")
-                    assertEquals(searchBaseViewModel.preferencesRecentSearchList?.size, 2)
-                }
-
-                println("removeRecentSearch() Total Time: $totalExecutionTime")
+    fun canSearchMore() {
+        runBlocking {
+            val totalExecutionTime = measureTimeMillis {
+                assertEquals(searchBaseViewModel.canSearchMore(), false)
+                searchBaseViewModel.initData()
+                assertEquals(searchBaseViewModel.canSearchMore(), true)
             }
+
+            println("removeRecentSearch() Total Time: $totalExecutionTime")
+        }
+    }
+
+    @Test
+    fun removeRecentSearch() {
+        runBlocking {
+            val totalExecutionTime = measureTimeMillis {
+                searchBaseViewModel.removeRecentSearch("123")
+                assertEquals(searchBaseViewModel.preferencesRecentSearchList?.size, 2)
+            }
+
+            println("removeRecentSearch() Total Time: $totalExecutionTime")
         }
     }
 
     @Test
     fun clickData() {
-        runTest {
-            launch(Dispatchers.Main) {
-                val searchData = mock<SearchData>()
-                val totalExecutionTime = measureTimeMillis {
-                    searchBaseViewModel.clickData(searchData)
-                    assertEquals(searchBaseViewModel.clickData.getOrAwaitValue(), searchData)
-                }
-
-                println("clickData() Total Time: $totalExecutionTime")
+        runBlocking {
+            val searchData = mock<SearchData>()
+            val totalExecutionTime = measureTimeMillis {
+                searchBaseViewModel.clickData(searchData)
+                assertEquals(searchBaseViewModel.clickData.getOrAwaitValue(), searchData)
             }
+
+            println("clickData() Total Time: $totalExecutionTime")
         }
     }
 }

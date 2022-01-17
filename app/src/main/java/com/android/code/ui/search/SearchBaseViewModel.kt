@@ -5,7 +5,9 @@ import com.android.code.models.repository.MarvelRepository
 import com.android.code.ui.BaseViewModel
 import com.android.code.util.empty
 import com.android.code.util.livedata.SafetyMutableLiveData
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
 import kotlin.coroutines.cancellation.CancellationException
 
 abstract class SearchBaseViewModel(open val marvelRepository: MarvelRepository) :
@@ -130,10 +132,11 @@ abstract class SearchBaseViewModel(open val marvelRepository: MarvelRepository) 
         )
     }
 
+    override fun canSearchMore(): Boolean {
+        return currentOffset < currentTotal
+    }
+
     override fun searchMore() {
-        if (currentOffset >= currentTotal) {
-            return
-        }
         launchDataLoad(
             onLoad = {
                 val searchDataList = marvelRepository.characters(
@@ -181,6 +184,7 @@ abstract class SearchBaseViewModel(open val marvelRepository: MarvelRepository) 
 interface SearchViewModelInput {
     fun initData()
     fun search(text: String)
+    fun canSearchMore(): Boolean
     fun searchMore()
     fun removeRecentSearch(text: String)
     fun clickData(searchData: SearchData)
