@@ -28,6 +28,8 @@ class SearchGridFragment : BaseFragment<FragmentSearchGridBinding>(), OnRefreshL
         SearchAdapter(object : SearchAdapterProperty {
             override val requestManager: RequestManager
                 get() = this@SearchGridFragment.requestManager
+            override val searchedData: LiveData<SearchBaseData>
+                get() = viewModel.searchedData
             override val searchedText: LiveData<String>
                 get() = viewModel.searchedText
 

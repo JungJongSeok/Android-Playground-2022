@@ -13,6 +13,10 @@
             name="data"
             type="com.android.code.ui.search.SearchBaseData" />
 
+        <variable
+            name="isSelected"
+            type="Boolean" />
+
         <import type="android.text.TextUtils" />
 
         <import type="android.view.View" />
@@ -24,7 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:onClick="@{() -> property.clickData(data)}"
-        app:cardBackgroundColor="@color/white"
+        app:cardBackgroundColor="@{isSelected ? @color/color_f5f5f5 : @color/white}"
         app:cardCornerRadius="10dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout

@@ -5,6 +5,7 @@ import com.bumptech.glide.RequestManager
 
 interface SearchAdapterProperty {
     val requestManager: RequestManager
+    val searchedData: LiveData<SearchBaseData>
     val searchedText: LiveData<String>
     fun search(text: String)
     fun removeRecentSearch(text: String)

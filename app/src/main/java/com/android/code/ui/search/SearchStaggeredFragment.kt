@@ -28,6 +28,8 @@ class SearchStaggeredFragment : BaseFragment<FragmentSearchStaggeredBinding>(), 
         SearchAdapter(object : SearchAdapterProperty {
             override val requestManager: RequestManager
                 get() = this@SearchStaggeredFragment.requestManager
+            override val searchedData: LiveData<SearchBaseData>
+                get() = viewModel.searchedData
             override val searchedText: LiveData<String>
                 get() = viewModel.searchedText
 
