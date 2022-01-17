@@ -10,6 +10,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import com.android.code.R
+import com.android.code.ui.views.progress.LoadingDialog
 import com.bumptech.glide.Glide
 import timber.log.Timber
 
@@ -20,6 +21,10 @@ abstract class BaseFragment<T : ViewDataBinding> : Fragment() {
     private var _binding: T? = null
         private set
     protected val binding get() = _binding!!
+
+    protected val loadingDialog by lazy {
+        LoadingDialog(requireContext())
+    }
 
     val requestManager by lazy {
         Glide.with(this)

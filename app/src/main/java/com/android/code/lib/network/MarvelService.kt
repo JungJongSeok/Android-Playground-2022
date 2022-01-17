@@ -10,6 +10,7 @@ interface MarvelService {
     @GET("characters")
     suspend fun characters(
         @Query("nameStartsWith") nameStartsWith: String?,
+        @Query("offset") offset: Int,
         @Query("limit") limit: Int,
         @Query("apikey") apikey: String,
         @Query("ts") timestamp: Long,

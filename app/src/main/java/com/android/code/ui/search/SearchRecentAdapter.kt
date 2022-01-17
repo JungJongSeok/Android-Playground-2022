@@ -1,14 +1,14 @@
-package com.android.code.ui.sample
+package com.android.code.ui.search
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.android.code.databinding.HolderSampleSearchRecentDataBinding
+import com.android.code.databinding.HolderSearchRecentDataBinding
 
-class SampleSearchRecentAdapter(private val property: SampleSearchRecentAdapterProperty) :
-    ListAdapter<String, SampleSearchRecentAdapter.Holder>(
+class SearchRecentAdapter(private val property: SearchRecentAdapterProperty) :
+    ListAdapter<String, SearchRecentAdapter.Holder>(
         object : DiffUtil.ItemCallback<String>() {
             override fun areContentsTheSame(oldItem: String, newItem: String): Boolean {
                 return oldItem == newItem
@@ -22,7 +22,7 @@ class SampleSearchRecentAdapter(private val property: SampleSearchRecentAdapterP
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         return Holder(
-            HolderSampleSearchRecentDataBinding.inflate(
+            HolderSearchRecentDataBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -33,14 +33,14 @@ class SampleSearchRecentAdapter(private val property: SampleSearchRecentAdapterP
     override fun onBindViewHolder(holder: Holder, position: Int) {
         holder.binding.apply {
             val data = getItem(position)
-            property = this@SampleSearchRecentAdapter.property
+            property = this@SearchRecentAdapter.property
             text = data
-            isSelected = data == this@SampleSearchRecentAdapter.property.searchedText.value
+            isSelected = data == this@SearchRecentAdapter.property.searchedText.value
             executePendingBindings()
         }
     }
 
-    inner class Holder(val binding: HolderSampleSearchRecentDataBinding) :
+    inner class Holder(val binding: HolderSearchRecentDataBinding) :
         RecyclerView.ViewHolder(binding.root)
 
 }
