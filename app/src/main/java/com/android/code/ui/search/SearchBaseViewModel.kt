@@ -23,10 +23,6 @@ abstract class SearchBaseViewModel(open val marvelRepository: MarvelRepository) 
     override val responseData: LiveData<Pair<List<SearchData>, Boolean>>
         get() = _responseData
 
-    private val _recentSearchList = SafetyMutableLiveData<List<String>>()
-    override val recentSearchList: LiveData<List<String>>
-        get() = _recentSearchList
-
     private val _clickData = SafetyMutableLiveData<SearchData>()
     override val clickData: LiveData<SearchData>
         get() = _clickData
@@ -41,7 +37,7 @@ abstract class SearchBaseViewModel(open val marvelRepository: MarvelRepository) 
 
     private val initializeDataList = ArrayList<SearchData>()
 
-    protected abstract var preferencesRecentSearchList: List<String>?
+    abstract var preferencesRecentSearchList: List<String>?
 
     private var currentOffset = 0
     private var currentTotal = 0
@@ -192,7 +188,6 @@ interface SearchViewModelInput {
 
 interface SearchViewModelOutput {
     val responseData: LiveData<Pair<List<SearchData>, Boolean>>
-    val recentSearchList: LiveData<List<String>>
     val clickData: LiveData<SearchData>
     val searchedData: LiveData<SearchBaseData>
     val searchedText: LiveData<String>

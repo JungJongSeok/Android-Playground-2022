@@ -52,7 +52,7 @@ class SearchGridFragment : BaseFragment<FragmentSearchGridBinding>(), OnRefreshL
             spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                 override fun getSpanSize(position: Int): Int {
                     return if (adapter.currentList.getOrNull(position) is SearchRecentData) {
-                        2
+                        GRID_SPAN_COUNT
                     } else {
                         1
                     }
