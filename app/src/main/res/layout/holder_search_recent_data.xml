@@ -27,7 +27,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@{isSelected ? @color/white : @color/black, default = @color/black}"
-            android:paddingHorizontal="20dp"
+            android:paddingStart="12dp"
+            android:paddingEnd="21dp"
             android:paddingVertical="8dp"
             android:text="@{text}"
             android:onClick="@{() -> property.search(text)}"
@@ -40,7 +41,7 @@
             android:text="X"
             android:textColor="@color/teal_200"
             android:textSize="20dp"
-            android:paddingEnd="5dp"
+            android:paddingEnd="6dp"
             android:onClick="@{() -> property.removeRecentSearch(text)}"
             android:layout_gravity="end|center_vertical"
             />
