@@ -4,9 +4,11 @@ import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.*
 import com.android.code.databinding.HolderSearchDataBinding
 import com.android.code.databinding.HolderSearchRecentBinding
+import com.android.code.util.ViewDetectable
 
 class SearchAdapter(private val property: SearchAdapterProperty) :
     ListAdapter<SearchData, RecyclerView.ViewHolder>(
@@ -72,7 +74,9 @@ class SearchAdapter(private val property: SearchAdapterProperty) :
             is SearchHolder -> {
                 holder.binding.apply {
                     property = this@SearchAdapter.property
-                    data = getItem(position) as? SearchBaseData
+                    val searchBaseData = getItem(position) as? SearchBaseData
+                    data = searchBaseData
+                    isSelected = searchBaseData == this@SearchAdapter.property.searchedData.value
                     executePendingBindings()
                 }
             }
@@ -119,8 +123,35 @@ class SearchAdapter(private val property: SearchAdapterProperty) :
         }
     }
 
+    override fun onViewAttachedToWindow(holder: RecyclerView.ViewHolder) {
+        super.onViewAttachedToWindow(holder)
+        if (holder is ViewDetectable) {
+            holder.onViewAttachedToWindow(holder)
+        }
+    }
+
+    override fun onViewDetachedFromWindow(holder: RecyclerView.ViewHolder) {
+        super.onViewDetachedFromWindow(holder)
+        if (holder is ViewDetectable) {
+            holder.onViewDetachedFromWindow(holder)
+        }
+    }
+
     private inner class SearchHolder(val binding: HolderSearchDataBinding) :
-        RecyclerView.ViewHolder(binding.root)
+        RecyclerView.ViewHolder(binding.root), ViewDetectable {
+        private val observer = Observer<SearchBaseData> {
+            binding.isSelected = it == binding.data
+        }
+
+        override fun onViewAttachedToWindow(holder: RecyclerView.ViewHolder) {
+            property.searchedData.observeForever(observer)
+        }
+
+        override fun onViewDetachedFromWindow(holder: RecyclerView.ViewHolder) {
+            property.searchedData.removeObserver(observer)
+        }
+
+    }
 
     private inner class RecentHolder(val binding: HolderSearchRecentBinding) :
         RecyclerView.ViewHolder(binding.root)

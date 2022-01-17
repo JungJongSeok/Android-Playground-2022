@@ -31,6 +31,10 @@ abstract class SearchBaseViewModel(open val marvelRepository: MarvelRepository) 
     override val clickData: LiveData<SearchData>
         get() = _clickData
 
+    private val _searchedData = SafetyMutableLiveData<SearchBaseData>()
+    override val searchedData: LiveData<SearchBaseData>
+        get() = _searchedData
+
     private val _searchedText = SafetyMutableLiveData<String>()
     override val searchedText: LiveData<String>
         get() = _searchedText
@@ -172,6 +176,9 @@ abstract class SearchBaseViewModel(open val marvelRepository: MarvelRepository) 
 
     override fun clickData(searchData: SearchData) {
         _clickData.setValueSafety(searchData)
+        if (searchData is SearchBaseData) {
+            _searchedData.setValueSafety(searchData)
+        }
     }
 }
 
@@ -187,5 +194,6 @@ interface SearchViewModelOutput {
     val responseData: LiveData<Pair<List<SearchData>, Boolean>>
     val recentSearchList: LiveData<List<String>>
     val clickData: LiveData<SearchData>
+    val searchedData: LiveData<SearchBaseData>
     val searchedText: LiveData<String>
 }
