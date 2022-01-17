@@ -27,3 +27,7 @@ jobs:
 
       - name: Build APK
         run: bash ./gradlew assembleDebug --stacktrace
+        
+      - name: Build Unit Test
+        run: bash ./gradlew test
+       
