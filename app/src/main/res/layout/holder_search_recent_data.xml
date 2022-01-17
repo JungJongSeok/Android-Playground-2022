@@ -6,7 +6,7 @@
     <data>
         <variable
             name="property"
-            type="com.android.code.ui.sample.SampleSearchRecentAdapterProperty" />
+            type="com.android.code.ui.search.SearchRecentAdapterProperty" />
 
         <variable
             name="isSelected"

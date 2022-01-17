@@ -1,9 +1,9 @@
-package com.android.code.ui.sample
+package com.android.code.ui.search
 
 import androidx.lifecycle.LiveData
 import com.bumptech.glide.RequestManager
 
-interface SampleSearchAdapterProperty {
+interface SearchAdapterProperty {
     val requestManager: RequestManager
     val searchedText: LiveData<String>
     fun search(text: String)

@@ -1,4 +1,4 @@
-package com.android.code.ui.sample
+package com.android.code.ui.search
 
 import com.android.code.models.marvel.MarvelResult
 

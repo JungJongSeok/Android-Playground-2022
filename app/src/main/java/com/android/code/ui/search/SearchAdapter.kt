@@ -1,17 +1,14 @@
-package com.android.code.ui.sample
+package com.android.code.ui.search
 
 import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.lifecycle.LiveData
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
-import com.android.code.databinding.HolderSampleSearchDataBinding
-import com.android.code.databinding.HolderSampleSearchRecentBinding
+import androidx.recyclerview.widget.*
+import com.android.code.databinding.HolderSearchDataBinding
+import com.android.code.databinding.HolderSearchRecentBinding
 
-class SampleSearchAdapter(private val property: SampleSearchAdapterProperty) :
+class SearchAdapter(private val property: SearchAdapterProperty) :
     ListAdapter<SearchData, RecyclerView.ViewHolder>(
         object : DiffUtil.ItemCallback<SearchData>() {
             override fun areContentsTheSame(oldItem: SearchData, newItem: SearchData): Boolean {
@@ -24,21 +21,18 @@ class SampleSearchAdapter(private val property: SampleSearchAdapterProperty) :
         }
     ) {
     companion object {
-        private val restoredHolderMap = HashMap<String, Parcelable?>()
         private const val TYPE_BASE = 0
         private const val TYPE_RECENT = 1
     }
 
-    init {
-        restoredHolderMap.clear()
-    }
+    private val restoredHolderMap = HashMap<String, Parcelable?>()
 
     override fun onViewRecycled(holder: RecyclerView.ViewHolder) {
         super.onViewRecycled(holder)
         if (itemCount <= holder.layoutPosition || RecyclerView.NO_POSITION == holder.layoutPosition) {
             return
         }
-        if (holder is SampleRecentHolder) {
+        if (holder is RecentHolder) {
             val data = getItem(holder.layoutPosition) as? SearchRecentData ?: return
             restoredHolderMap[data.hashCode().toString()] =
                 holder.binding.recyclerView.layoutManager?.onSaveInstanceState()
@@ -55,15 +49,15 @@ class SampleSearchAdapter(private val property: SampleSearchAdapterProperty) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            TYPE_BASE -> SampleSearchHolder(
-                HolderSampleSearchDataBinding.inflate(
+            TYPE_BASE -> SearchHolder(
+                HolderSearchDataBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
                     false
                 )
             )
-            TYPE_RECENT -> SampleRecentHolder(
-                HolderSampleSearchRecentBinding.inflate(
+            TYPE_RECENT -> RecentHolder(
+                HolderSearchRecentBinding.inflate(
                     LayoutInflater.from(
                         parent.context
                     ), parent, false
@@ -75,19 +69,21 @@ class SampleSearchAdapter(private val property: SampleSearchAdapterProperty) :
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is SampleSearchHolder -> {
+            is SearchHolder -> {
                 holder.binding.apply {
-                    property = this@SampleSearchAdapter.property
+                    property = this@SearchAdapter.property
                     data = getItem(position) as? SearchBaseData
                     executePendingBindings()
                 }
             }
-            is SampleRecentHolder -> {
+            is RecentHolder -> {
+                (holder.itemView.layoutParams as? StaggeredGridLayoutManager.LayoutParams)
+                    ?.isFullSpan = true
                 holder.binding.apply {
                     holder.binding.recyclerView.layoutManager =
                         LinearLayoutManager(this.root.context, RecyclerView.HORIZONTAL, false)
                     val adapter =
-                        SampleSearchRecentAdapter(object : SampleSearchRecentAdapterProperty {
+                        SearchRecentAdapter(object : SearchRecentAdapterProperty {
                             override val searchedText: LiveData<String>
                                 get() = property.searchedText
 
@@ -102,7 +98,7 @@ class SampleSearchAdapter(private val property: SampleSearchAdapterProperty) :
 
                             fun submitListAfterRemovedRecentSearch(text: String) {
                                 val adapter =
-                                    (holder.binding.recyclerView.adapter as? SampleSearchRecentAdapter)
+                                    (holder.binding.recyclerView.adapter as? SearchRecentAdapter)
                                         ?: return
                                 val list = adapter.currentList.filter { it != text }
                                 adapter.submitList(list)
@@ -123,9 +119,9 @@ class SampleSearchAdapter(private val property: SampleSearchAdapterProperty) :
         }
     }
 
-    private inner class SampleSearchHolder(val binding: HolderSampleSearchDataBinding) :
+    private inner class SearchHolder(val binding: HolderSearchDataBinding) :
         RecyclerView.ViewHolder(binding.root)
 
-    private inner class SampleRecentHolder(val binding: HolderSampleSearchRecentBinding) :
+    private inner class RecentHolder(val binding: HolderSearchRecentBinding) :
         RecyclerView.ViewHolder(binding.root)
 }

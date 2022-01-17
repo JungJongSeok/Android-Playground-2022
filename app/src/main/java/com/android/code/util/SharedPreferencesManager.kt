@@ -1,5 +1,7 @@
 package com.android.code.util
 
 interface SharedPreferencesManager {
-    var recentSearchList: List<String>?
+    var recentGridSearchList: List<String>?
+
+    var recentStaggeredSearchList: List<String>?
 }

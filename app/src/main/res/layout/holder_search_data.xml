@@ -7,11 +7,15 @@
 
         <variable
             name="property"
-            type="com.android.code.ui.sample.SampleSearchAdapterProperty" />
+            type="com.android.code.ui.search.SearchAdapterProperty" />
 
         <variable
             name="data"
-            type="com.android.code.ui.sample.SearchBaseData" />
+            type="com.android.code.ui.search.SearchBaseData" />
+
+        <import type="android.text.TextUtils" />
+
+        <import type="android.view.View" />
 
     </data>
 
@@ -55,6 +59,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/thumbnail"
+                app:layout_goneMarginBottom="30dp"
                 tools:text="title" />
 
             <TextView
@@ -67,6 +72,7 @@
                 android:maxLines="3"
                 android:text="@{data.result.description}"
                 android:textSize="15sp"
+                android:visibility="@{!TextUtils.isEmpty(data.result.description) ? View.VISIBLE : View.GONE, default = gone}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

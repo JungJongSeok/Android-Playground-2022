@@ -25,7 +25,7 @@
         tools:replace="android:fullBackupContent"
         tools:targetApi="n">
         <activity
-            android:name=".ui.sample.SampleActivity"
+            android:name=".ui.main.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             android:exported="true">

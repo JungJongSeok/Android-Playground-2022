@@ -7,5 +7,8 @@
 
     <string name="search_recent">최근 검색어</string>
 
+    <string name="main_tab_grid">GRID</string>
+    <string name="main_tab_staggered">STAGGERED</string>
+
     <string name="sample_marvel_resource_format" translatable="false">%s.%s</string>
 </resources>

@@ -19,14 +19,14 @@ class CommonSwipeRefreshLayout @JvmOverloads constructor(context: Context, attrs
 @BindingAdapter("refreshListener")
 fun setOnRefreshListener(
     refreshLayout: SwipeRefreshLayout,
-    refreshListener: RefreshListener
+    onRefreshListener: OnRefreshListener
 ) {
     refreshLayout.setOnRefreshListener {
-        refreshListener.refresh(refreshLayout)
+        onRefreshListener.refresh(refreshLayout)
     }
 }
 
-interface RefreshListener {
+interface OnRefreshListener {
 
     fun refresh(view: SwipeRefreshLayout)
 }

@@ -1,8 +1,8 @@
-package com.android.code.ui.sample
+package com.android.code.ui.search
 
 import androidx.lifecycle.LiveData
 
-interface SampleSearchRecentAdapterProperty {
+interface SearchRecentAdapterProperty {
     val searchedText: LiveData<String>
     fun search(text: String)
     fun removeRecentSearch(text: String)
