@@ -22,24 +22,22 @@ import org.mockito.kotlin.mock
 import kotlin.system.measureTimeMillis
 
 @kotlinx.coroutines.ExperimentalCoroutinesApi
-@DisplayName("Search 테스트")
+@DisplayName("SearchBaseViewModel 테스트")
 @ExtendWith(InstantExecutorExtension::class, CoroutinesTestExtension::class)
 internal class SearchBaseViewModelTest {
-    private lateinit var marvelResult: MarvelResult
-    private lateinit var sampleResponse: SampleResponse
     private lateinit var searchBaseViewModel: SearchBaseViewModel
 
     @BeforeEach
     fun setUp() {
-        marvelResult = mock {
+        val marvelResult: MarvelResult = mock {
             on { id } doReturn 1
         }
-        sampleResponse = mock {
+        val sampleResponse: SampleResponse = mock {
             on { count } doReturn 20
             on { total } doReturn 1000
             on { results } doReturn listOf(marvelResult, marvelResult, marvelResult)
         }
-        searchBaseViewModel = object : SearchBaseViewModel(object : MarvelRepository {
+        val marvelRepository: MarvelRepository = object : MarvelRepository {
             override suspend fun characters(
                 nameStartsWith: String?,
                 offset: Int,
@@ -54,17 +52,17 @@ internal class SearchBaseViewModelTest {
             override var recentGridSearchList: List<String>? = listOf("GRID")
             override var recentStaggeredSearchList: List<String>? = listOf("STAGGERED", "STAGGERED")
 
-        }) {
+        }
+        searchBaseViewModel = object : SearchBaseViewModel(marvelRepository) {
             override var preferencesRecentSearchList: List<String>? = listOf("123", "456", "789")
-
         }
     }
 
     @Test
     fun initData() {
         runTest {
-            launch(Dispatchers.Main){
-            val totalExecutionTime = measureTimeMillis {
+            launch(Dispatchers.Main) {
+                val totalExecutionTime = measureTimeMillis {
                     searchBaseViewModel.initData()
                     assertEquals(searchBaseViewModel.responseData.getOrAwaitValue().first.size, 4)
                 }
@@ -96,7 +94,7 @@ internal class SearchBaseViewModelTest {
     @Test
     fun searchMore() {
         runTest {
-            launch(Dispatchers.Main){
+            launch(Dispatchers.Main) {
                 val totalExecutionTime = measureTimeMillis {
                     searchBaseViewModel.initData()
                     delay(1000)
