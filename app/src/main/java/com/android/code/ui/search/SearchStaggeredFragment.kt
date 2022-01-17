@@ -67,6 +67,7 @@ class SearchStaggeredFragment : BaseFragment<FragmentSearchStaggeredBinding>(), 
                 super.onScrollStateChanged(recyclerView, newState)
                 if (layoutManager.findLastVisibleItemPositions(null)
                         .lastOrNull() ?: return > adapter.itemCount - 5
+                    && viewModel.canSearchMore()
                 ) {
                     viewModel.inputs.searchMore()
                 }

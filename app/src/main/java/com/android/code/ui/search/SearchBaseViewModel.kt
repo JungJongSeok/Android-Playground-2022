@@ -5,7 +5,9 @@ import com.android.code.models.repository.MarvelRepository
 import com.android.code.ui.BaseViewModel
 import com.android.code.util.empty
 import com.android.code.util.livedata.SafetyMutableLiveData
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
 import kotlin.coroutines.cancellation.CancellationException
 
 abstract class SearchBaseViewModel(open val marvelRepository: MarvelRepository) :
@@ -23,10 +25,6 @@ abstract class SearchBaseViewModel(open val marvelRepository: MarvelRepository) 
     override val responseData: LiveData<Pair<List<SearchData>, Boolean>>
         get() = _responseData
 
-    private val _recentSearchList = SafetyMutableLiveData<List<String>>()
-    override val recentSearchList: LiveData<List<String>>
-        get() = _recentSearchList
-
     private val _clickData = SafetyMutableLiveData<SearchData>()
     override val clickData: LiveData<SearchData>
         get() = _clickData
@@ -41,7 +39,7 @@ abstract class SearchBaseViewModel(open val marvelRepository: MarvelRepository) 
 
     private val initializeDataList = ArrayList<SearchData>()
 
-    protected abstract var preferencesRecentSearchList: List<String>?
+    abstract var preferencesRecentSearchList: List<String>?
 
     private var currentOffset = 0
     private var currentTotal = 0
@@ -134,10 +132,11 @@ abstract class SearchBaseViewModel(open val marvelRepository: MarvelRepository) 
         )
     }
 
+    override fun canSearchMore(): Boolean {
+        return currentOffset < currentTotal
+    }
+
     override fun searchMore() {
-        if (currentOffset >= currentTotal) {
-            return
-        }
         launchDataLoad(
             onLoad = {
                 val searchDataList = marvelRepository.characters(
@@ -185,6 +184,7 @@ abstract class SearchBaseViewModel(open val marvelRepository: MarvelRepository) 
 interface SearchViewModelInput {
     fun initData()
     fun search(text: String)
+    fun canSearchMore(): Boolean
     fun searchMore()
     fun removeRecentSearch(text: String)
     fun clickData(searchData: SearchData)
@@ -192,7 +192,6 @@ interface SearchViewModelInput {
 
 interface SearchViewModelOutput {
     val responseData: LiveData<Pair<List<SearchData>, Boolean>>
-    val recentSearchList: LiveData<List<String>>
     val clickData: LiveData<SearchData>
     val searchedData: LiveData<SearchBaseData>
     val searchedText: LiveData<String>

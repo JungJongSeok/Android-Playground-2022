@@ -52,7 +52,7 @@ class SearchGridFragment : BaseFragment<FragmentSearchGridBinding>(), OnRefreshL
             spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                 override fun getSpanSize(position: Int): Int {
                     return if (adapter.currentList.getOrNull(position) is SearchRecentData) {
-                        2
+                        GRID_SPAN_COUNT
                     } else {
                         1
                     }
@@ -72,7 +72,9 @@ class SearchGridFragment : BaseFragment<FragmentSearchGridBinding>(), OnRefreshL
         binding.parent.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
-                if (layoutManager.findLastVisibleItemPosition() > adapter.itemCount - 5) {
+                if (layoutManager.findLastVisibleItemPosition() > adapter.itemCount - 5
+                    && viewModel.canSearchMore()
+                ) {
                     viewModel.inputs.searchMore()
                 }
             }
