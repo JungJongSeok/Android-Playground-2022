@@ -27,15 +27,17 @@ open class BaseViewModel : ViewModel() {
 
     fun launchDataLoad(
         onLoad: suspend CoroutineScope.() -> Unit,
-        onError: (suspend (Exception) -> Unit)? = null
+        onError: (suspend (Exception) -> Unit)? = null,
+        onFinally: (suspend CoroutineScope.() -> Unit)? = null
     ): Job {
-        return launchDataLoad(_loading, onLoad, onError)
+        return launchDataLoad(_loading, onLoad, onError, onFinally)
     }
 
     fun launchDataLoad(
         loadingLiveData: MutableLiveData<Boolean>?,
         onLoad: suspend CoroutineScope.() -> Unit,
-        onError: (suspend (Exception) -> Unit)? = null
+        onError: (suspend (Exception) -> Unit)? = null,
+        onFinally: (suspend CoroutineScope.() -> Unit)? = null
     ): Job {
         return viewModelScope.launch {
             if (loadingLiveData?.value == true) {
@@ -49,6 +51,7 @@ open class BaseViewModel : ViewModel() {
                 onError?.invoke(e)
             } finally {
                 loadingLiveData?.value = false
+                onFinally?.invoke(this)
             }
         }
     }
@@ -56,7 +59,8 @@ open class BaseViewModel : ViewModel() {
     fun launchDataLoad(
         lock: AtomicBoolean,
         onLoad: suspend CoroutineScope.() -> Unit,
-        onError: (suspend (Exception) -> Unit)? = null
+        onError: (suspend (Exception) -> Unit)? = null,
+        onFinally: (suspend CoroutineScope.() -> Unit)? = null
     ): Job {
         return viewModelScope.launch {
             if (lock.getAndSet(true)) {
@@ -69,6 +73,7 @@ open class BaseViewModel : ViewModel() {
                 onError?.invoke(e)
             } finally {
                 lock.set(false)
+                onFinally?.invoke(this)
             }
         }
     }

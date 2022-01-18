@@ -37,7 +37,13 @@ abstract class SearchBaseViewModel(open val marvelRepository: MarvelRepository) 
     override val searchedText: LiveData<String>
         get() = _searchedText
 
+    private val _refreshedSwipeRefreshLayout = SafetyMutableLiveData<Boolean>()
+    override val refreshedSwipeRefreshLayout: LiveData<Boolean>
+        get() = _refreshedSwipeRefreshLayout
+
     private val initializeDataList = ArrayList<SearchData>()
+    private var initializeOffset = 0
+    private var initializeTotal = 0
 
     abstract var preferencesRecentSearchList: List<String>?
 
@@ -45,8 +51,13 @@ abstract class SearchBaseViewModel(open val marvelRepository: MarvelRepository) 
     private var currentTotal = 0
     private var currentText: String? = null
 
-    override fun initData() {
+    override fun initData(isRefreshing: Boolean) {
         launchDataLoad(
+            if(isRefreshing) {
+                _refreshedSwipeRefreshLayout
+            } else {
+                _loading
+            },
             onLoad = {
                 initSearchData()
                 val recentSearchList = preferencesRecentSearchList?.run { SearchRecentData(this) }
@@ -65,6 +76,8 @@ abstract class SearchBaseViewModel(open val marvelRepository: MarvelRepository) 
 
                 initializeDataList.clear()
                 initializeDataList.addAll(searchDataList)
+                initializeOffset = currentOffset
+                initializeTotal = currentTotal
                 _responseData.setValueSafety(totalList to true)
             },
             onError = {
@@ -74,9 +87,13 @@ abstract class SearchBaseViewModel(open val marvelRepository: MarvelRepository) 
     }
 
     private var searchTask: Deferred<Unit>? = null
-    override fun search(text: String) {
+    override fun search(text: String, isRefreshing: Boolean) {
         launchDataLoad(
-            null,
+            if(isRefreshing) {
+                _refreshedSwipeRefreshLayout
+            } else {
+                null
+            },
             onLoad = {
                 searchTask?.cancel()
                 initSearchData()
@@ -89,6 +106,8 @@ abstract class SearchBaseViewModel(open val marvelRepository: MarvelRepository) 
                     } else {
                         initializeDataList
                     }
+                    currentOffset = initializeOffset
+                    currentTotal = initializeTotal
                     _searchedText.setValueSafety(String.empty())
                     _responseData.setValueSafety(totalList to true)
                     return@launchDataLoad
@@ -182,8 +201,8 @@ abstract class SearchBaseViewModel(open val marvelRepository: MarvelRepository) 
 }
 
 interface SearchViewModelInput {
-    fun initData()
-    fun search(text: String)
+    fun initData(isRefreshing: Boolean = false)
+    fun search(text: String, isRefreshing: Boolean = false)
     fun canSearchMore(): Boolean
     fun searchMore()
     fun removeRecentSearch(text: String)
@@ -195,4 +214,5 @@ interface SearchViewModelOutput {
     val clickData: LiveData<SearchData>
     val searchedData: LiveData<SearchBaseData>
     val searchedText: LiveData<String>
+    val refreshedSwipeRefreshLayout: LiveData<Boolean>
 }
