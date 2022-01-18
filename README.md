@@ -23,6 +23,8 @@
     - Flipper for Okhttp and db debugging
 - Logging
     - Timber
+- CI/CD
+    - Github Actions
 - Coding Style
     - Kotlin Coding Conventions
     - https://velog.io/@lsb156/IntelliJ-Kotlin-Code-Style-%EC%84%A4%EC%A0%95%EB%B2%95
@@ -35,19 +37,19 @@
 ### 1. Search
 - Requirements
     - [x] 300 millis threshold
-    - [x]  Recent searches feature
-    - [x]  Scroll save be reused
+    - [x] Recent searches feature
+    - [x] Scroll save be reused
 
 ### 2. ViewPager
 - Requirements
-    - [x]  LayoutManager with two types ( Grid,Stagged )
+    - [x] LayoutManager with two types ( Grid,Stagged )
     
 ### 3. RecyclerView
 - Requirements
-    - [x]  Select save be resused
-    - [x]  Single slected
-    - [x]  Pagination
-    - [x]  Pull to Refresh
+    - [x] Select save be resused
+    - [x] Single slected
+    - [x] Pagination
+    - [x] Pull to Refresh
 
 ### 4. TestCode
 - Requirements
