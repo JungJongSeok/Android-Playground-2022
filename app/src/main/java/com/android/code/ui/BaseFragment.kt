@@ -19,7 +19,6 @@ abstract class BaseFragment<T : ViewDataBinding> : Fragment() {
     @LayoutRes
     abstract fun getLayoutResId(): Int
     private var _binding: T? = null
-        private set
     protected val binding get() = _binding!!
 
     protected val loadingDialog by lazy {
