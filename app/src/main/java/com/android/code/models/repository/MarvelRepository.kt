@@ -22,8 +22,8 @@ interface MarvelRepository {
 
 class MarvelRepositoryImpl(
     private val marvelService: MarvelService,
-    private val sharedPreferencesManager: SharedPreferencesManager
-): MarvelRepository {
+    private val sharedPreferencesManager: SharedPreferencesManager,
+) : MarvelRepository {
     override suspend fun characters(
         nameStartsWith: String?,
         offset: Int,
@@ -31,7 +31,17 @@ class MarvelRepositoryImpl(
     ): BaseResponse<SampleResponse> {
         val timestamp = System.currentTimeMillis()
         val hash = marvelHash(timestamp)
-        return marvelService.characters(nameStartsWith, offset, limit, BuildConfig.MARVEL_PUBLIC_KEY, timestamp, hash)
+        val nameStarts = if (nameStartsWith.isNullOrBlank()) {
+            null
+        } else {
+            nameStartsWith
+        }
+        return marvelService.characters(nameStarts,
+            offset,
+            limit,
+            BuildConfig.MARVEL_PUBLIC_KEY,
+            timestamp,
+            hash)
     }
 
     private suspend fun marvelHash(timestamp: Long): String {

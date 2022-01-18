@@ -91,6 +91,10 @@ class SearchGridFragment : BaseFragment<FragmentSearchGridBinding>(), OnRefreshL
             }
 
         })
+
+        if (savedInstanceState != null) {
+            binding.parent.searchView.setQuery(String.empty(), false)
+        }
     }
 
     override fun setViewModelOutputs() {

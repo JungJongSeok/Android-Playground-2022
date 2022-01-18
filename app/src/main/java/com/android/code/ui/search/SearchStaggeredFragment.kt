@@ -85,6 +85,10 @@ class SearchStaggeredFragment : BaseFragment<FragmentSearchStaggeredBinding>(), 
             }
 
         })
+
+        if (savedInstanceState != null) {
+            binding.parent.searchView.setQuery(String.empty(), false)
+        }
     }
 
     override fun setViewModelOutputs() {
