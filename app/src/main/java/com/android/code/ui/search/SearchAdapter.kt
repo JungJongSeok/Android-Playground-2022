@@ -110,8 +110,8 @@ class SearchAdapter(private val property: SearchAdapterProperty) :
                         })
                     holder.binding.recyclerView.adapter = adapter
                     val data = getItem(position) as? SearchRecentData
-                    data.run {
-                        adapter.submitList(this?.recentList)
+                    data?.run {
+                        adapter.submitList(this.recentList)
                         restoredHolderMap[this.hashCode().toString()]?.let {
                             recyclerView.layoutManager?.onRestoreInstanceState(it)
                         }

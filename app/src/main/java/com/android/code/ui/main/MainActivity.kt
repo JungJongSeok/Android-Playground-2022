@@ -67,14 +67,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
     }
 
     private fun setCurrentItem(@Page position: Int) {
-        when (position) {
-            PAGE_GRID -> {
-                binding.pager.setCurrentItem(0, false)
-            }
-            PAGE_STAGGERED -> {
-                binding.pager.setCurrentItem(1, false)
-            }
-        }
+        binding.pager.setCurrentItem(position, false)
     }
 
     override fun setViewModelOutputs() {
