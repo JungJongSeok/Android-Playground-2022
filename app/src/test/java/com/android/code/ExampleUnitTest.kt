@@ -27,14 +27,14 @@ class ExampleUnitTest {
     }
 
     @Test
-    @DisplayName("기본적인 덧셈 테스트 기능을 확인한다")
+    @DisplayName("기본적인 덧셈 테스트 기능을 검증한다.")
     fun checkBasicAssertion() {
         val actual = 2 + 2
         assertEquals(actual, 4)
     }
 
     @Test
-    @DisplayName("ClassForTest 객체의 property 값을 확인할 수 있다")
+    @DisplayName("ClassForTest 객체의 property 값을 검증한다.")
     fun checkValueOfProperty() {
         assertEquals(foo.text, "Test Success~")
     }
