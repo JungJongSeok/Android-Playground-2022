@@ -7,7 +7,7 @@
 
         <variable
             name="refresh"
-            type="com.android.code.ui.views.OnRefreshListener" />
+            type="com.android.code.ui.views.CommonSwipeRefreshLayout.OnRefreshListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -30,7 +30,7 @@
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/searchView"
-            app:refreshListener="@{refresh}">
+            app:setOnRefreshListener="@{refresh}">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
