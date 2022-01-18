@@ -42,6 +42,8 @@ abstract class SearchBaseViewModel(open val marvelRepository: MarvelRepository) 
         get() = _refreshedSwipeRefreshLayout
 
     private val initializeDataList = ArrayList<SearchData>()
+    private var initializeOffset = 0
+    private var initializeTotal = 0
 
     abstract var preferencesRecentSearchList: List<String>?
 
@@ -74,6 +76,8 @@ abstract class SearchBaseViewModel(open val marvelRepository: MarvelRepository) 
 
                 initializeDataList.clear()
                 initializeDataList.addAll(searchDataList)
+                initializeOffset = currentOffset
+                initializeTotal = currentTotal
                 _responseData.setValueSafety(totalList to true)
             },
             onError = {
@@ -102,6 +106,8 @@ abstract class SearchBaseViewModel(open val marvelRepository: MarvelRepository) 
                     } else {
                         initializeDataList
                     }
+                    currentOffset = initializeOffset
+                    currentTotal = initializeTotal
                     _searchedText.setValueSafety(String.empty())
                     _responseData.setValueSafety(totalList to true)
                     return@launchDataLoad
