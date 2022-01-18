@@ -12,8 +12,9 @@ internal class ExtensionsKtTest {
     )
     private val testDataJson = "{\"a\":\"a\",\"b\":1,\"c\":[1.0,2.0]}"
 
-    private val list = listOf("a", "b", "c")
-    private val listJson = "[\"a\",\"b\",\"c\"]"
+    private val list = listOf(1, 2, 3)
+    private val listNothingToken = listOf(1.0, 2.0, 3.0)
+    private val listJson = "[1,2,3]"
 
     private val map = mapOf("a" to 1, "b" to 2, "c" to 3)
     private val mapNothingToken = mapOf("a" to 1.0, "b" to 2.0, "c" to 3.0)
@@ -24,7 +25,7 @@ internal class ExtensionsKtTest {
     @DisplayName("JsonString 을 Object 로 변환 한다. 일반적인 경우 but Collection 일때 정상 작동 안할 수 있음.")
     fun fromJson() {
         assertEquals(testDataJson.fromJson<TestData>(), TestData())
-        assertEquals(listJson.fromJson<List<String>>(), list)
+        assertEquals(listJson.fromJson<List<Int>>(), listNothingToken)
         assertEquals(mapJson.fromJson<Map<String, Int>>(), mapNothingToken)
     }
 
@@ -32,7 +33,7 @@ internal class ExtensionsKtTest {
     @DisplayName("JsonString 을 Object 로 변환 한다. Collection 일 경우 사용")
     fun fromJsonWithTypeToken() {
         assertEquals(testDataJson.fromJsonWithTypeToken<TestData>(), TestData())
-        assertEquals(listJson.fromJsonWithTypeToken<List<String>>(), list)
+        assertEquals(listJson.fromJsonWithTypeToken<List<Int>>(), list)
         assertEquals(mapJson.fromJsonWithTypeToken<Map<String, Int>>(), map)
     }
 
