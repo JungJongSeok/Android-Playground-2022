@@ -55,4 +55,10 @@
 - Requirements
     - [x] Start unit test code
     - [ ] Code coverage over 50%
+
+### 5. ZoomEffectLayout
+
+![ezgif com-video-to-gif-2](https://user-images.githubusercontent.com/12586065/149887467-b7b30beb-7b7d-4707-a3b6-9a94d8e4c6eb.gif)
+
+
     
