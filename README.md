@@ -32,6 +32,20 @@
 ![structure](https://user-images.githubusercontent.com/12586065/149857108-9c15a05b-3e8c-4077-8d4e-667ee605e98c.png)
 
 
+## Previous
+
+You have to apply API-KEY first.
+
+1. Open local.properties in your project.
+2. https://developer.marvel.com/ Get an API-KEY from the site
+3. Finally, Insert a value corresponding to the following API-KEY
+
+in `local.properties`
+```
+marvel_private_key = "marvel_private_key"
+marvel_public_key = "marvel_public_key"
+```
+
 ## Feature
 
 ### 1. Search
@@ -61,4 +75,9 @@
 ![ezgif com-video-to-gif-2](https://user-images.githubusercontent.com/12586065/149887467-b7b30beb-7b7d-4707-a3b6-9a94d8e4c6eb.gif)
 
 
-    
+## DEMO VIDEO
+
+https://user-images.githubusercontent.com/12586065/149955385-0639c1f9-7827-4c1e-ace0-31c5b087c7f9.mp4
+
+
+
