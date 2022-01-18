@@ -125,6 +125,10 @@ class SearchGridFragment : BaseFragment<FragmentSearchGridBinding>(), OnRefreshL
         viewModel.outputs.searchedText.observe(this) {
             binding.parent.searchView.setQuery(it, false)
         }
+
+        viewModel.outputs.refreshedSwipeRefreshLayout.observe(this) {
+            binding.parent.refreshLayout.isRefreshing = it
+        }
     }
 
     override fun setViewModelInputs() {
@@ -133,10 +137,9 @@ class SearchGridFragment : BaseFragment<FragmentSearchGridBinding>(), OnRefreshL
 
     override fun refresh(view: SwipeRefreshLayout) {
         if (binding.parent.searchView.query.isNullOrEmpty()) {
-            viewModel.inputs.initData()
+            viewModel.inputs.initData(true)
         } else {
-            viewModel.inputs.search(binding.parent.searchView.query.toString())
+            viewModel.inputs.search(binding.parent.searchView.query.toString(), true)
         }
-        view.isRefreshing = false
     }
 }
