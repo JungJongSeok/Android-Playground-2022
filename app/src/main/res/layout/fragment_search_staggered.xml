@@ -6,7 +6,7 @@
 
         <variable
             name="refresh"
-            type="com.android.code.ui.views.OnRefreshListener" />
+            type="com.android.code.ui.views.CommonSwipeRefreshLayout.OnRefreshListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

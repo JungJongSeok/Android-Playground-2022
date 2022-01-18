@@ -10,12 +10,13 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.android.code.R
 import com.android.code.databinding.FragmentSearchGridBinding
 import com.android.code.ui.BaseFragment
-import com.android.code.ui.views.OnRefreshListener
+import com.android.code.ui.views.CommonSwipeRefreshLayout
 import com.android.code.util.empty
 import com.bumptech.glide.RequestManager
 import org.koin.android.ext.android.inject
 
-class SearchGridFragment : BaseFragment<FragmentSearchGridBinding>(), OnRefreshListener {
+class SearchGridFragment : BaseFragment<FragmentSearchGridBinding>(),
+    CommonSwipeRefreshLayout.OnRefreshListener {
     companion object {
         fun newInstance() = SearchGridFragment()
 
