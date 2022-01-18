@@ -52,6 +52,7 @@ internal class SearchBaseViewModelTest {
     }
 
     @Test
+    @DisplayName("characters api 의 호출한다.")
     fun initData() {
         runBlocking {
             val totalExecutionTime = measureTimeMillis {
@@ -64,6 +65,7 @@ internal class SearchBaseViewModelTest {
     }
 
     @Test
+    @DisplayName("300 millis 의 threshold 의 characters api 를 검증한다.")
     fun search() {
         runBlocking {
             val totalExecutionTime = measureTimeMillis {
@@ -89,6 +91,7 @@ internal class SearchBaseViewModelTest {
     }
 
     @Test
+    @DisplayName("characters api 의 pagination 을 검증한다.")
     fun searchMore() {
         runBlocking {
             launch {
@@ -106,6 +109,7 @@ internal class SearchBaseViewModelTest {
     }
 
     @Test
+    @DisplayName("characters api 의 pagination 이 가능한지 여부를 측정한다. Offset < Total")
     fun canSearchMore() {
         runBlocking {
             val totalExecutionTime = measureTimeMillis {
@@ -119,6 +123,7 @@ internal class SearchBaseViewModelTest {
     }
 
     @Test
+    @DisplayName("최근 검색어의 단어 하나를 제거한다.")
     fun removeRecentSearch() {
         runBlocking {
             val totalExecutionTime = measureTimeMillis {
@@ -131,6 +136,7 @@ internal class SearchBaseViewModelTest {
     }
 
     @Test
+    @DisplayName("click 한 데이터를 검증한다.")
     fun clickData() {
         runBlocking {
             val searchData = mock<SearchData>()
