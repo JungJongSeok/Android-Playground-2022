@@ -86,7 +86,7 @@ abstract class SearchBaseViewModel(open val marvelRepository: MarvelRepository) 
         )
     }
 
-    private var searchTask: Deferred<Unit>? = null
+    private var searchTask: Deferred<List<SearchBaseData>?>? = null
     override fun search(text: String, isRefreshing: Boolean) {
         launchDataLoad(
             if(isRefreshing) {
@@ -120,27 +120,25 @@ abstract class SearchBaseViewModel(open val marvelRepository: MarvelRepository) 
                                 currentOffset = count
                                 currentTotal = total
                             }.results?.map { SearchBaseData(it) }
-                    }.onFailure {
-                        _error.setValueSafety(it)
-                    }.onSuccess {
-                        preferencesRecentSearchList =
-                            (listOf(text) + (preferencesRecentSearchList
-                                ?: emptyList())).distinct()
-
-                        val recentSearchList =
-                            preferencesRecentSearchList?.run { SearchRecentData(this) }
-
-                        val totalList = if (recentSearchList != null) {
-                            listOf(recentSearchList) + (it ?: emptyList())
-                        } else {
-                            it ?: emptyList()
-                        }
-
-                        _searchedText.setValueSafety(text)
-                        _responseData.setValueSafety(totalList to true)
-                    }
+                    }.getOrNull()
                 }
-                searchTask?.await()
+                searchTask?.await()?.run {
+                    preferencesRecentSearchList =
+                        (listOf(text) + (preferencesRecentSearchList
+                            ?: emptyList())).distinct()
+
+                    val recentSearchList =
+                        preferencesRecentSearchList?.run { SearchRecentData(this) }
+
+                    val totalList = if (recentSearchList != null) {
+                        listOf(recentSearchList) + this
+                    } else {
+                        this
+                    }
+
+                    _searchedText.setValueSafety(text)
+                    _responseData.setValueSafety(totalList to true)
+                }
             },
             onError = {
                 if (it is CancellationException) {
