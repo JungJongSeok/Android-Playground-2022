@@ -126,7 +126,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:20.0.1'
     implementation 'com.google.android.gms:play-services-auth-api-phone:18.0.1'
 
-    // New version
+    // multidex
     def multidex_version = "2.0.1"
     implementation "androidx.multidex:multidex:$multidex_version"
 
@@ -167,7 +167,7 @@ dependencies {
     implementation "org.koin:koin-androidx-viewmodel:$koin_version"
 
     // lottie
-    implementation 'com.airbnb.android:lottie:3.7.0'
+    implementation 'com.airbnb.android:lottie:3.7.1'
 
     // Unit Test
     testImplementation "org.junit.jupiter:junit-jupiter-engine:5.7.1"

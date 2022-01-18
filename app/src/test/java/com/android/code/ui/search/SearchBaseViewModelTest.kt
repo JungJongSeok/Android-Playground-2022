@@ -37,7 +37,7 @@ internal class SearchBaseViewModelTest {
             override suspend fun characters(
                 nameStartsWith: String?,
                 offset: Int,
-                limit: Int
+                limit: Int,
             ): BaseResponse<SampleResponse> {
                 return BaseResponse(sampleResponse)
             }
@@ -67,13 +67,21 @@ internal class SearchBaseViewModelTest {
     fun search() {
         runBlocking {
             val totalExecutionTime = measureTimeMillis {
+                searchBaseViewModel.initData()
+                searchBaseViewModel.search("")
+                assertEquals(searchBaseViewModel.searchedText.getOrAwaitValue(), "")
                 searchBaseViewModel.search("spi")
-                assertEquals(searchBaseViewModel.searchedText.getOrAwaitValue(), "spi")
+                searchBaseViewModel.search("spider")
+                assertEquals(searchBaseViewModel.searchedText.getOrAwaitValue(), "")
+                delay(500)
+                assertEquals(searchBaseViewModel.searchedText.getOrAwaitValue(), "spider")
+                searchBaseViewModel.search("spider-m")
+                assertEquals(searchBaseViewModel.searchedText.getOrAwaitValue(), "spider")
                 searchBaseViewModel.search("spider-man")
-                assertEquals(searchBaseViewModel.searchedText.getOrAwaitValue(), "spi")
-                delay(1000)
-                searchBaseViewModel.search("spider-man")
+                delay(500)
                 assertEquals(searchBaseViewModel.searchedText.getOrAwaitValue(), "spider-man")
+                assertEquals(searchBaseViewModel.preferencesRecentSearchList,
+                    listOf("spider-man", "spider", "123", "456", "789"))
             }
 
             println("search() Total Time: $totalExecutionTime")
