@@ -106,6 +106,10 @@ class SearchGridFragment : BaseFragment<FragmentSearchGridBinding>(), OnRefreshL
             }
         }
 
+        viewModel.error.observe(this) {
+            showNetworkError(it)
+        }
+
         viewModel.outputs.responseData.observe(this) { (list, isScrolled) ->
             adapter.submitList(list) {
                 adapter.notifyDataSetChanged()
