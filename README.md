@@ -1,5 +1,6 @@
 # playground-2022
-### 안드로이드 개발 2022년
+### 안드로이드 개발 2022년 [![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2FJungJongSeok%2FAndroid-Playground-2022&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false)](https://hits.seeyoufarm.com)
+
 
 #### This project uses the following stack:
 
@@ -77,7 +78,6 @@ marvel_public_key = "marvel_public_key"
 
 ## DEMO VIDEO
 
-[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2FJungJongSeok%2FAndroid-Playground-2022&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false)](https://hits.seeyoufarm.com)
-
+https://user-images.githubusercontent.com/12586065/150128510-d634f2fa-e5c8-4363-ac15-93cac1a02813.mp4
 
 
