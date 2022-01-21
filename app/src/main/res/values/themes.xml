@@ -14,6 +14,16 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowLightStatusBar" tools:ignore="NewApi">true</item>
+        <!-- Splash screen resource. -->
+        <item name="android:windowSplashScreenBackground" tools:targetApi="S">
+            @color/color_3746ff
+        </item>
+        <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="S">
+            @drawable/ic_launcher_foreground
+        </item>
+        <item name="android:windowSplashScreenIconBackgroundColor" tools:targetApi="S">
+            @color/black
+        </item>
         <!-- Customize your theme here. -->
         <item name="fontFamily">@font/notosanskr</item>
         <item name="android:fontFamily">@font/notosanskr</item>
