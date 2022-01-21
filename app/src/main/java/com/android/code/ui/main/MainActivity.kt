@@ -1,9 +1,13 @@
 package com.android.code.ui.main
 
+import android.animation.AnimatorInflater
+import android.annotation.TargetApi
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import androidx.annotation.IntDef
+import androidx.core.animation.doOnEnd
 import com.android.code.R
 import com.android.code.databinding.ActivityMainBinding
 import com.android.code.ui.BaseActivity
@@ -63,6 +67,20 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
         }
         if (savedInstanceState == null) {
             setCurrentItem(selectPosition)
+        }
+        setSplashScreen()
+    }
+
+    @TargetApi(Build.VERSION_CODES.S)
+    private fun setSplashScreen() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+            return
+        }
+        splashScreen.setOnExitAnimationListener { splashScreenView ->
+            AnimatorInflater.loadAnimator(this, R.animator.splash_screen_zoom_out).apply {
+                setTarget(splashScreenView)
+                doOnEnd { splashScreenView.remove() }
+            }.start()
         }
     }
 
