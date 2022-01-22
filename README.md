@@ -57,7 +57,7 @@ marvel_public_key = "marvel_public_key"
 
 ### 2. ViewPager
 - Requirements
-    - [x] LayoutManager with two types ( Grid,Stagged )
+    - [x] LayoutManager with two types ( Grid,Staggered )
     
 ### 3. RecyclerView
 - Requirements
