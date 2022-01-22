@@ -1,7 +1,7 @@
 package com.android.code.ui.search
 
 import androidx.lifecycle.LiveData
-import com.android.code.models.repository.MarvelRepository
+import com.android.code.repository.MarvelRepository
 import com.android.code.ui.BaseViewModel
 import com.android.code.util.empty
 import com.android.code.util.livedata.SafetyMutableLiveData

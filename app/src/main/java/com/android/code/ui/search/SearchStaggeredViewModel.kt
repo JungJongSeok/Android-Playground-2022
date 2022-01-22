@@ -1,6 +1,6 @@
 package com.android.code.ui.search
 
-import com.android.code.models.repository.MarvelRepository
+import com.android.code.repository.MarvelRepository
 
 class SearchStaggeredViewModel(override val marvelRepository: MarvelRepository) :
     SearchBaseViewModel(marvelRepository) {

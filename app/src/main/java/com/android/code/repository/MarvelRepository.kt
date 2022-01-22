@@ -1,4 +1,4 @@
-package com.android.code.models.repository
+package com.android.code.repository
 
 import com.android.code.BuildConfig
 import com.android.code.lib.network.MarvelService
