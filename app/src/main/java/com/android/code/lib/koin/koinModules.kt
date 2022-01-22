@@ -1,8 +1,8 @@
 package com.android.code.lib.koin
 
 import com.android.code.lib.network.MarvelService
-import com.android.code.models.repository.MarvelRepository
-import com.android.code.models.repository.MarvelRepositoryImpl
+import com.android.code.repository.MarvelRepository
+import com.android.code.repository.MarvelRepositoryImpl
 import com.android.code.ui.main.MainViewModel
 import com.android.code.ui.search.SearchGridViewModel
 import com.android.code.ui.search.SearchStaggeredViewModel
