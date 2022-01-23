@@ -10,10 +10,13 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.android.code.R
 import com.android.code.databinding.FragmentSearchStaggeredBinding
 import com.android.code.ui.BaseFragment
+import com.android.code.ui.main.MainActivity
+import com.android.code.ui.main.MainViewModel
 import com.android.code.ui.views.CommonSwipeRefreshLayout
 import com.android.code.util.empty
 import com.bumptech.glide.RequestManager
 import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class SearchStaggeredFragment : BaseFragment<FragmentSearchStaggeredBinding>(),
     CommonSwipeRefreshLayout.OnRefreshListener {
@@ -24,6 +27,7 @@ class SearchStaggeredFragment : BaseFragment<FragmentSearchStaggeredBinding>(),
     }
 
     private val viewModel: SearchStaggeredViewModel by inject()
+    private val mainViewModel: MainViewModel by sharedViewModel()
 
     private val adapter by lazy {
         SearchAdapter(object : SearchAdapterProperty {
@@ -127,6 +131,13 @@ class SearchStaggeredFragment : BaseFragment<FragmentSearchStaggeredBinding>(),
 
         viewModel.outputs.refreshedSwipeRefreshLayout.observe(this) {
             binding.parent.refreshLayout.isRefreshing = it
+        }
+
+        mainViewModel.outputs.scrollToTop.observe(this) {
+            if (it != MainActivity.PAGE_STAGGERED) {
+                return@observe
+            }
+            layoutManager.scrollToPositionWithOffset(0, 0)
         }
     }
 

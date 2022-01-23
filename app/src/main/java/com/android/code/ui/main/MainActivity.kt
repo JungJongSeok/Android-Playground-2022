@@ -14,6 +14,7 @@ import com.android.code.ui.BaseActivity
 import com.android.code.ui.RequiresActivityViewModel
 import com.android.code.ui.search.SearchGridFragment
 import com.android.code.ui.search.SearchStaggeredFragment
+import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
 
@@ -23,22 +24,24 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
         const val PAGE_GRID = 0
         const val PAGE_STAGGERED = 1
 
-        @IntDef(PAGE_GRID, PAGE_STAGGERED)
-        @Retention(AnnotationRetention.SOURCE)
-        annotation class Page
-
         fun startActivity(context: Context) {
             context.startActivity(Intent(context, MainActivity::class.java))
         }
     }
 
+    @IntDef(PAGE_GRID, PAGE_STAGGERED)
+    @Retention(AnnotationRetention.SOURCE)
+    annotation class Page
+
     private val tabAdapter by lazy {
-        MainTabAdapter(
-            this, listOf(
-                SearchGridFragment.newInstance(),
-                SearchStaggeredFragment.newInstance()
+        MainTabAdapter(this).apply {
+            submitList(
+                listOf(
+                    SearchGridFragment.newInstance(),
+                    SearchStaggeredFragment.newInstance()
+                )
             )
-        )
+        }
     }
 
     private val mediator by lazy {
@@ -65,6 +68,20 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
         } else {
             binding.tabLayout.selectedTabPosition
         }
+        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                // Do noting
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+                // Do noting
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+                viewModel.inputs.scrollToTop(tab?.position ?: return)
+            }
+
+        })
         if (savedInstanceState == null) {
             setCurrentItem(selectPosition)
         }
