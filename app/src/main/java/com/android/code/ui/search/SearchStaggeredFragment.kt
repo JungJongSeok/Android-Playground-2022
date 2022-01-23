@@ -137,6 +137,7 @@ class SearchStaggeredFragment : BaseFragment<FragmentSearchStaggeredBinding>(),
             if (it != MainActivity.PAGE_STAGGERED) {
                 return@observe
             }
+            binding.parent.recyclerView.stopScroll()
             layoutManager.scrollToPositionWithOffset(0, 0)
         }
     }

@@ -143,6 +143,7 @@ class SearchGridFragment : BaseFragment<FragmentSearchGridBinding>(),
             if (it != MainActivity.PAGE_GRID) {
                 return@observe
             }
+            binding.parent.recyclerView.stopScroll()
             layoutManager.scrollToPositionWithOffset(0, 0)
         }
     }
