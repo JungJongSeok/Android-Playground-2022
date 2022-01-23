@@ -10,10 +10,13 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.android.code.R
 import com.android.code.databinding.FragmentSearchGridBinding
 import com.android.code.ui.BaseFragment
+import com.android.code.ui.main.MainActivity
+import com.android.code.ui.main.MainViewModel
 import com.android.code.ui.views.CommonSwipeRefreshLayout
 import com.android.code.util.empty
 import com.bumptech.glide.RequestManager
 import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class SearchGridFragment : BaseFragment<FragmentSearchGridBinding>(),
     CommonSwipeRefreshLayout.OnRefreshListener {
@@ -24,6 +27,7 @@ class SearchGridFragment : BaseFragment<FragmentSearchGridBinding>(),
     }
 
     private val viewModel: SearchGridViewModel by inject()
+    private val mainViewModel: MainViewModel by sharedViewModel()
 
     private val adapter by lazy {
         SearchAdapter(object : SearchAdapterProperty {
@@ -69,7 +73,6 @@ class SearchGridFragment : BaseFragment<FragmentSearchGridBinding>(),
 
         binding.parent.recyclerView.layoutManager = layoutManager
         binding.parent.recyclerView.adapter = adapter
-        binding.parent.recyclerView.clearOnScrollListeners()
         binding.parent.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
@@ -133,6 +136,14 @@ class SearchGridFragment : BaseFragment<FragmentSearchGridBinding>(),
 
         viewModel.outputs.refreshedSwipeRefreshLayout.observe(this) {
             binding.parent.refreshLayout.isRefreshing = it
+        }
+
+        mainViewModel.outputs.scrollToTop.observe(this) {
+            if (it != MainActivity.PAGE_GRID) {
+                return@observe
+            }
+            binding.parent.recyclerView.stopScroll()
+            layoutManager.scrollToPositionWithOffset(0, 0)
         }
     }
 
