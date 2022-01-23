@@ -73,7 +73,6 @@ class SearchGridFragment : BaseFragment<FragmentSearchGridBinding>(),
 
         binding.parent.recyclerView.layoutManager = layoutManager
         binding.parent.recyclerView.adapter = adapter
-        binding.parent.recyclerView.clearOnScrollListeners()
         binding.parent.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)

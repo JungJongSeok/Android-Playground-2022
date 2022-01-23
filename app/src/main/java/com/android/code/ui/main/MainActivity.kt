@@ -63,11 +63,6 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
         binding.pager.adapter = tabAdapter
 
         mediator.attach()
-        val selectPosition = if (binding.tabLayout.selectedTabPosition < 0) {
-            PAGE_GRID
-        } else {
-            binding.tabLayout.selectedTabPosition
-        }
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 // Do noting
@@ -82,6 +77,11 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
             }
 
         })
+        val selectPosition = if (binding.tabLayout.selectedTabPosition < 0) {
+            PAGE_GRID
+        } else {
+            binding.tabLayout.selectedTabPosition
+        }
         if (savedInstanceState == null) {
             setCurrentItem(selectPosition)
         }
@@ -111,5 +111,10 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
 
     override fun setViewModelInputs() {
         // Do something
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mediator.detach()
     }
 }
