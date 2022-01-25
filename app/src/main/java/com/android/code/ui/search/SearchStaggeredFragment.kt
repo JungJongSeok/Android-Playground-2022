@@ -3,6 +3,7 @@ package com.android.code.ui.search
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.isVisible
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -97,11 +98,7 @@ class SearchStaggeredFragment : BaseFragment<FragmentSearchStaggeredBinding>(),
 
     override fun setViewModelOutputs() {
         viewModel.loading.observe(this) {
-            if (it) {
-                loadingDialog.show()
-            } else {
-                loadingDialog.dismiss()
-            }
+            binding.loading.parent.isVisible = it
         }
 
         viewModel.error.observe(this) {

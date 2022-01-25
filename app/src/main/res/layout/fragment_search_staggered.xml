@@ -17,6 +17,10 @@
             android:id="@+id/parent"
             layout="@layout/layout_search_base"
             app:refresh="@{refresh}" />
+
+        <include
+            android:id="@+id/loading"
+            layout="@layout/layout_loading_dialog" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>
