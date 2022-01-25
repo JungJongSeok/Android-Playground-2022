@@ -18,11 +18,12 @@
             android:id="@+id/searchView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
+            android:background="@color/white"
             app:iconifiedByDefault="false"
             app:layout_constraintBottom_toTopOf="@id/refreshLayout"
             app:layout_constraintTop_toTopOf="parent"
-            app:queryHint="@string/search_hint" />
+            app:queryHint="@string/search_hint"
+            tools:targetApi="q" />
 
         <com.android.code.ui.views.CommonSwipeRefreshLayout
             android:id="@+id/refreshLayout"
