@@ -75,6 +75,23 @@ marvel_public_key = "marvel_public_key"
 
 ![ezgif com-video-to-gif-2](https://user-images.githubusercontent.com/12586065/149887467-b7b30beb-7b7d-4707-a3b6-9a94d8e4c6eb.gif)
 
+## Target 대응
+
+### 1. Android 10 target 29
+ - [x] Dark mode
+ - [ ] Foldables layout
+
+
+### 1. Android 11 target 30
+ - [ ] Scoped storage enforcement
+
+
+### 1. Android 12 target 31
+ - [x] SplashScreen
+ - [x] android:exported 명시 
+ - [ ] Custom notification 
+
+
 
 ## DEMO VIDEO
 
