@@ -6,7 +6,7 @@ import okhttp3.OkHttpClient
 class FlipperModule {
     companion object {
         fun initialize(context: Context) {
-            // Do not something
+            // Do nothing
         }
     }
 }
