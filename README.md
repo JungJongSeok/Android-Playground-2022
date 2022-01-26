@@ -88,7 +88,7 @@ marvel_public_key = "marvel_public_key"
 
 ### 1. Android 12 target 31
  - [x] SplashScreen
- - [x] android:exported 명시 
+ - [x] android:exported required
  - [ ] Custom notification 
 
 
