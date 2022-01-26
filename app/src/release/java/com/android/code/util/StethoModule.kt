@@ -6,7 +6,7 @@ import okhttp3.OkHttpClient
 class StethoModule {
     companion object {
         fun initializeWithDefaults(context: Context) {
-            // Do not something
+            // Do nothing
         }
     }
 }

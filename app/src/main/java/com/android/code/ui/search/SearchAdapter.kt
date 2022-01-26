@@ -84,7 +84,7 @@ class SearchAdapter(private val property: SearchAdapterProperty) :
                 (holder.itemView.layoutParams as? StaggeredGridLayoutManager.LayoutParams)
                     ?.isFullSpan = true
                 holder.binding.apply {
-                    holder.binding.recyclerView.layoutManager =
+                    recyclerView.layoutManager =
                         LinearLayoutManager(this.root.context, RecyclerView.HORIZONTAL, false)
                     val adapter =
                         SearchRecentAdapter(object : SearchRecentAdapterProperty {
@@ -102,13 +102,12 @@ class SearchAdapter(private val property: SearchAdapterProperty) :
 
                             fun submitListAfterRemovedRecentSearch(text: String) {
                                 val adapter =
-                                    (holder.binding.recyclerView.adapter as? SearchRecentAdapter)
-                                        ?: return
+                                    (recyclerView.adapter as? SearchRecentAdapter) ?: return
                                 val list = adapter.currentList.filter { it != text }
                                 adapter.submitList(list)
                             }
                         })
-                    holder.binding.recyclerView.adapter = adapter
+                    recyclerView.adapter = adapter
                     val data = getItem(position) as? SearchRecentData
                     data?.run {
                         adapter.submitList(this.recentList)

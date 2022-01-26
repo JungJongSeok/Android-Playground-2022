@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.android.code.databinding.HolderSearchRecentDataBinding
 
 class SearchRecentAdapter(private val property: SearchRecentAdapterProperty) :
-    ListAdapter<String, SearchRecentAdapter.Holder>(
+    ListAdapter<String, RecyclerView.ViewHolder>(
         object : DiffUtil.ItemCallback<String>() {
             override fun areContentsTheSame(oldItem: String, newItem: String): Boolean {
                 return oldItem == newItem
@@ -20,8 +20,8 @@ class SearchRecentAdapter(private val property: SearchRecentAdapterProperty) :
         }
     ) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
-        return Holder(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return SearchRecentHolder(
             HolderSearchRecentDataBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
@@ -30,17 +30,21 @@ class SearchRecentAdapter(private val property: SearchRecentAdapterProperty) :
         )
     }
 
-    override fun onBindViewHolder(holder: Holder, position: Int) {
-        holder.binding.apply {
-            val data = getItem(position)
-            property = this@SearchRecentAdapter.property
-            text = data
-            isSelected = data == this@SearchRecentAdapter.property.searchedText.value
-            executePendingBindings()
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when (holder) {
+            is SearchRecentHolder -> {
+                holder.binding.apply {
+                    val data = getItem(position)
+                    property = this@SearchRecentAdapter.property
+                    text = data
+                    isSelected = data == this@SearchRecentAdapter.property.searchedText.value
+                    executePendingBindings()
+                }
+            }
         }
     }
 
-    inner class Holder(val binding: HolderSearchRecentDataBinding) :
+    private inner class SearchRecentHolder(val binding: HolderSearchRecentDataBinding) :
         RecyclerView.ViewHolder(binding.root)
 
 }
