@@ -27,7 +27,7 @@
         <!-- Customize your theme here. -->
         <item name="fontFamily">@font/notosanskr</item>
         <item name="android:fontFamily">@font/notosanskr</item>
-        <item name="android:textColor">#000</item>
+        <item name="android:textColor">@color/black</item>
         <item name="android:textSize">14sp</item>
         <item name="android:overScrollMode">never</item>
         <item name="android:includeFontPadding">false</item>
