@@ -42,13 +42,10 @@ internal class SearchBaseViewModelTest {
                 return BaseResponse(sampleResponse)
             }
 
-            override var recentGridSearchList: List<String>? = listOf("GRID")
-            override var recentStaggeredSearchList: List<String>? = listOf("STAGGERED", "STAGGERED")
+            override var recentList: List<String>? = listOf("123", "456", "789")
 
         }
-        searchBaseViewModel = object : SearchBaseViewModel(marvelRepository) {
-            override var preferencesRecentSearchList: List<String>? = listOf("123", "456", "789")
-        }
+        searchBaseViewModel = SearchBaseViewModel(marvelRepository)
     }
 
     @Test
@@ -82,7 +79,7 @@ internal class SearchBaseViewModelTest {
                 searchBaseViewModel.search("spider-man")
                 delay(500)
                 assertEquals(searchBaseViewModel.searchedText.getOrAwaitValue(), "spider-man")
-                assertEquals(searchBaseViewModel.preferencesRecentSearchList,
+                assertEquals(searchBaseViewModel.getPreferencesRecentSearchList(),
                     listOf("spider-man", "spider", "123", "456", "789"))
             }
 
@@ -128,7 +125,7 @@ internal class SearchBaseViewModelTest {
         runBlocking {
             val totalExecutionTime = measureTimeMillis {
                 searchBaseViewModel.removeRecentSearch("123")
-                assertEquals(searchBaseViewModel.preferencesRecentSearchList?.size, 2)
+                assertEquals(searchBaseViewModel.getPreferencesRecentSearchList()?.size, 2)
             }
 
             println("removeRecentSearch() Total Time: $totalExecutionTime")
