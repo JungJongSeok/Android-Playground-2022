@@ -9,6 +9,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.security.MessageDigest
 
+enum class SearchType {
+    GRID, STAGGERED
+}
+
 interface MarvelRepository {
     suspend fun characters(
         nameStartsWith: String? = null,
@@ -16,13 +20,13 @@ interface MarvelRepository {
         limit: Int = 20,
     ): BaseResponse<SampleResponse>
 
-    var recentGridSearchList: List<String>?
-    var recentStaggeredSearchList: List<String>?
+    var recentList: List<String>?
 }
 
 class MarvelRepositoryImpl(
     private val marvelService: MarvelService,
     private val sharedPreferencesManager: SharedPreferencesManager,
+    private val type: SearchType
 ) : MarvelRepository {
     override suspend fun characters(
         nameStartsWith: String?,
@@ -54,16 +58,17 @@ class MarvelRepositoryImpl(
         }
     }
 
-    override var recentGridSearchList: List<String>?
-        get() = sharedPreferencesManager.recentGridSearchList
-        set(value) {
-            sharedPreferencesManager.recentGridSearchList = value
+    override var recentList: List<String>?
+        get() {
+            return when (type) {
+                SearchType.GRID -> sharedPreferencesManager.recentGridSearchList
+                SearchType.STAGGERED -> sharedPreferencesManager.recentStaggeredSearchList
+            }
         }
-
-
-    override var recentStaggeredSearchList: List<String>?
-        get() = sharedPreferencesManager.recentStaggeredSearchList
         set(value) {
-            sharedPreferencesManager.recentStaggeredSearchList = value
+            when (type) {
+                SearchType.GRID -> sharedPreferencesManager.recentGridSearchList = value
+                SearchType.STAGGERED -> sharedPreferencesManager.recentStaggeredSearchList = value
+            }
         }
 }

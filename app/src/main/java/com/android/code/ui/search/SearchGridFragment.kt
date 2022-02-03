@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.android.code.R
 import com.android.code.databinding.FragmentSearchGridBinding
+import com.android.code.repository.SearchType
 import com.android.code.ui.BaseFragment
 import com.android.code.ui.main.MainActivity
 import com.android.code.ui.main.MainViewModel
@@ -18,6 +19,7 @@ import com.android.code.util.empty
 import com.bumptech.glide.RequestManager
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.core.parameter.parametersOf
 
 class SearchGridFragment : BaseFragment<FragmentSearchGridBinding>(),
     CommonSwipeRefreshLayout.OnRefreshListener {
@@ -27,7 +29,7 @@ class SearchGridFragment : BaseFragment<FragmentSearchGridBinding>(),
         private const val GRID_SPAN_COUNT = 2
     }
 
-    private val viewModel: SearchGridViewModel by inject()
+    private val viewModel: SearchBaseViewModel by inject { parametersOf(SearchType.GRID) }
     private val mainViewModel: MainViewModel by sharedViewModel()
 
     private val adapter by lazy {
