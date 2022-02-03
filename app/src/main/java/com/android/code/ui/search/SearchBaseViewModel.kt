@@ -10,7 +10,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlin.coroutines.cancellation.CancellationException
 
-abstract class SearchBaseViewModel(open val marvelRepository: MarvelRepository) :
+class SearchBaseViewModel(private val marvelRepository: MarvelRepository) :
     BaseViewModel(),
     SearchViewModelInput, SearchViewModelOutput {
 
@@ -45,22 +45,20 @@ abstract class SearchBaseViewModel(open val marvelRepository: MarvelRepository) 
     private var initializeOffset = 0
     private var initializeTotal = 0
 
-    abstract var preferencesRecentSearchList: List<String>?
-
     private var currentOffset = 0
     private var currentTotal = 0
     private var currentText: String? = null
 
     override fun initData(isRefreshing: Boolean) {
         launchDataLoad(
-            if(isRefreshing) {
+            if (isRefreshing) {
                 _refreshedSwipeRefreshLayout
             } else {
                 _loading
             },
             onLoad = {
                 initSearchData()
-                val recentSearchList = preferencesRecentSearchList?.run { SearchRecentData(this) }
+                val recentSearchList = marvelRepository.recentList?.run { SearchRecentData(this) }
                 val searchDataList = marvelRepository.characters().data
                     .apply {
                         currentOffset = count
@@ -89,7 +87,7 @@ abstract class SearchBaseViewModel(open val marvelRepository: MarvelRepository) 
     private var searchTask: Deferred<List<SearchBaseData>?>? = null
     override fun search(text: String, isRefreshing: Boolean) {
         launchDataLoad(
-            if(isRefreshing) {
+            if (isRefreshing) {
                 _refreshedSwipeRefreshLayout
             } else {
                 null
@@ -100,7 +98,7 @@ abstract class SearchBaseViewModel(open val marvelRepository: MarvelRepository) 
                 currentText = text
                 if (text.isEmpty()) {
                     val recentSearchList =
-                        preferencesRecentSearchList?.run { SearchRecentData(this) }
+                        marvelRepository.recentList?.run { SearchRecentData(this) }
                     val totalList = if (recentSearchList != null) {
                         listOf(recentSearchList) + initializeDataList
                     } else {
@@ -123,12 +121,12 @@ abstract class SearchBaseViewModel(open val marvelRepository: MarvelRepository) 
                     }.getOrNull()
                 }
                 searchTask?.await()?.run {
-                    preferencesRecentSearchList =
-                        (listOf(text) + (preferencesRecentSearchList
+                    marvelRepository.recentList =
+                        (listOf(text) + (marvelRepository.recentList
                             ?: emptyList())).distinct()
 
                     val recentSearchList =
-                        preferencesRecentSearchList?.run { SearchRecentData(this) }
+                        marvelRepository.recentList?.run { SearchRecentData(this) }
 
                     val totalList = if (recentSearchList != null) {
                         listOf(recentSearchList) + this
@@ -181,8 +179,8 @@ abstract class SearchBaseViewModel(open val marvelRepository: MarvelRepository) 
     }
 
     override fun removeRecentSearch(text: String) {
-        preferencesRecentSearchList = preferencesRecentSearchList?.filter { it != text }
-        val recentSearchList = preferencesRecentSearchList
+        marvelRepository.recentList = marvelRepository.recentList?.filter { it != text }
+        val recentSearchList = marvelRepository.recentList
         if (recentSearchList.isNullOrEmpty()) {
             val previousDataList =
                 _responseData.value?.first?.filterIsInstance<SearchBaseData>() ?: emptyList()
