@@ -6,54 +6,60 @@ import com.android.code.models.BaseResponse
 import com.android.code.models.marvel.SampleResponse
 import com.android.code.ui.search.SearchType
 import com.android.code.util.SharedPreferencesManager
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import io.reactivex.rxjava3.core.Single
+import io.reactivex.rxjava3.schedulers.Schedulers
 import java.security.MessageDigest
 
 
-interface MarvelRepository {
-    suspend fun characters(
+interface MarvelRxRepository {
+    fun charactersRx(
         nameStartsWith: String? = null,
         offset: Int = 0,
         limit: Int = 20,
-    ): BaseResponse<SampleResponse>
+    ): Single<BaseResponse<SampleResponse>>
 
     var recentList: List<String>?
 }
 
-class MarvelRepositoryImpl(
+class MarvelRxRepositoryImpl(
     private val marvelService: MarvelService,
     private val sharedPreferencesManager: SharedPreferencesManager,
-    private val type: SearchType
-) : MarvelRepository {
-    override suspend fun characters(
+    private val type: SearchType,
+) : MarvelRxRepository {
+    override fun charactersRx(
         nameStartsWith: String?,
         offset: Int,
         limit: Int,
-    ): BaseResponse<SampleResponse> {
-        val timestamp = System.currentTimeMillis()
-        val hash = marvelHash(timestamp)
-        val nameStarts = if (nameStartsWith.isNullOrBlank()) {
-            null
-        } else {
-            nameStartsWith
+    ): Single<BaseResponse<SampleResponse>> {
+        return Single.fromCallable {
+            val timestamp = System.currentTimeMillis()
+            val hash = marvelHash(timestamp).blockingGet()
+            val nameStarts = if (nameStartsWith.isNullOrBlank()) {
+                null
+            } else {
+                nameStartsWith
+            }
+            Triple(timestamp, hash, nameStarts)
         }
-        return marvelService.characters(nameStarts,
-            offset,
-            limit,
-            BuildConfig.MARVEL_PUBLIC_KEY,
-            timestamp,
-            hash)
+            .subscribeOn(Schedulers.io())
+            .flatMap { (timestamp, hash, nameStarts) ->
+                marvelService.charactersRx(nameStarts,
+                    offset,
+                    limit,
+                    BuildConfig.MARVEL_PUBLIC_KEY,
+                    timestamp,
+                    hash)
+            }
     }
 
-    private suspend fun marvelHash(timestamp: Long): String {
-        return withContext(Dispatchers.IO) {
+    private fun marvelHash(timestamp: Long): Single<String> {
+        return Single.fromCallable {
             val digest = MessageDigest.getInstance("MD5")
             val hashString =
                 timestamp.toString() + BuildConfig.MARVEL_PRIVATE_KEY + BuildConfig.MARVEL_PUBLIC_KEY
             digest.update(hashString.encodeToByteArray())
             digest.digest().fold("") { acc, byte -> acc + String.format("%02x", byte) }
-        }
+        }.subscribeOn(Schedulers.io())
     }
 
     override var recentList: List<String>?
