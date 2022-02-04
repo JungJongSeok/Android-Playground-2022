@@ -122,6 +122,10 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 
+    // Rx
+    implementation 'io.reactivex.rxjava3:rxjava:3.0.0'
+    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
+
     // Auth Number
     implementation 'com.google.android.gms:play-services-auth:20.0.1'
     implementation 'com.google.android.gms:play-services-auth-api-phone:18.0.1'
@@ -134,6 +138,7 @@ dependencies {
     def retrofit2_version = "2.9.0"
     implementation "com.squareup.retrofit2:retrofit:$retrofit2_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit2_version"
+    implementation "com.squareup.retrofit2:adapter-rxjava3:$retrofit2_version"
     def okhttp3_version = "4.9.0"
     implementation "com.squareup.okhttp3:okhttp:$okhttp3_version"
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttp3_version"

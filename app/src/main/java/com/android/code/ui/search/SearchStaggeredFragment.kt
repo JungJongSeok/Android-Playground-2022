@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.android.code.R
 import com.android.code.databinding.FragmentSearchStaggeredBinding
-import com.android.code.repository.SearchType
 import com.android.code.ui.BaseFragment
 import com.android.code.ui.main.MainActivity
 import com.android.code.ui.main.MainViewModel
@@ -29,7 +28,7 @@ class SearchStaggeredFragment : BaseFragment<FragmentSearchStaggeredBinding>(),
         private const val GRID_SPAN_COUNT = 2
     }
 
-    private val viewModel: SearchBaseViewModel by inject { parametersOf(SearchType.STAGGERED) }
+    private val viewModel: SearchRxBaseViewModel by inject { parametersOf(SearchType.STAGGERED) }
     private val mainViewModel: MainViewModel by sharedViewModel()
 
     private val adapter by lazy {

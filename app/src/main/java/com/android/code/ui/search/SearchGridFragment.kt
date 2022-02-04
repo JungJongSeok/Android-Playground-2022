@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.android.code.R
 import com.android.code.databinding.FragmentSearchGridBinding
-import com.android.code.repository.SearchType
 import com.android.code.ui.BaseFragment
 import com.android.code.ui.main.MainActivity
 import com.android.code.ui.main.MainViewModel
