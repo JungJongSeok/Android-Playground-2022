@@ -45,6 +45,8 @@ internal class SearchBaseViewModelTest {
             override var recentList: List<String>? = listOf("123", "456", "789")
 
         }
+
+        
         searchBaseViewModel = SearchBaseViewModel(marvelRepository)
     }
 
