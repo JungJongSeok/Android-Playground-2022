@@ -169,6 +169,7 @@ dependencies {
     // koin
     def koin_version = "3.1.5"
     implementation "io.insert-koin:koin-android:$koin_version"
+    
 
     // lottie
     implementation 'com.airbnb.android:lottie:3.7.1'
