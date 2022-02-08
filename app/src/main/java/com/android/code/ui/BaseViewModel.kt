@@ -5,6 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.code.util.livedata.SafetyMutableLiveData
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.disposables.Disposable
+import io.reactivex.rxjava3.disposables.DisposableContainer
+import io.reactivex.rxjava3.kotlin.addTo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -24,6 +28,8 @@ open class BaseViewModel : ViewModel() {
     protected val _error: SafetyMutableLiveData<Throwable> = SafetyMutableLiveData()
     val error: LiveData<Throwable>
         get() = _error
+
+    protected val compositeDisposable = CompositeDisposable()
 
     fun launchDataLoad(
         onLoad: suspend CoroutineScope.() -> Unit,
@@ -76,5 +82,10 @@ open class BaseViewModel : ViewModel() {
                 onFinally?.invoke(this)
             }
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        compositeDisposable.clear()
     }
 }
