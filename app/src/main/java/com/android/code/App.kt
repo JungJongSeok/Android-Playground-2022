@@ -7,7 +7,8 @@ import com.android.code.lib.koin.repositoryModule
 import com.android.code.lib.koin.uiModule
 import com.android.code.util.FlipperModule
 import com.android.code.util.StethoModule
-import org.koin.android.ext.android.startKoin
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.startKoin
 import timber.log.Timber
 
 
@@ -34,7 +35,10 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        startKoin(this, appModule)
+        startKoin {
+            androidContext(applicationContext)
+            modules(appModule)
+        }
 
         if (BuildConfig.DEBUG) {
             // Timber Initialize

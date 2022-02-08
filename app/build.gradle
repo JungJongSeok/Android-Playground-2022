@@ -7,7 +7,7 @@ plugins {
 
 android {
     compileSdkVersion 31
-    buildToolsVersion "30.0.3"
+    buildToolsVersion "31.0.0"
 
     def dateCode = ("10" + new Date().format('yyMMddHH')).toInteger()
     def date = new Date().format('yyyy/MM/dd')
@@ -167,9 +167,8 @@ dependencies {
     debugImplementation "com.facebook.flipper:flipper-network-plugin:$flipper_version"
 
     // koin
-    def koin_version = "1.0.2"
-    implementation "org.koin:koin-androidx-scope:$koin_version"
-    implementation "org.koin:koin-androidx-viewmodel:$koin_version"
+    def koin_version = "3.1.5"
+    implementation "io.insert-koin:koin-android:$koin_version"
 
     // lottie
     implementation 'com.airbnb.android:lottie:3.7.1'

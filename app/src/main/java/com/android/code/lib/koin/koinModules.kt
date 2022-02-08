@@ -12,10 +12,10 @@ import com.android.code.ui.search.SearchRxBaseViewModel
 import com.android.code.ui.search.SearchType
 import com.android.code.util.SharedPreferencesManager
 import com.android.code.util.SharedPreferencesManagerImpl
-import org.koin.android.ext.koin.androidApplication
-import org.koin.androidx.viewmodel.ext.koin.viewModel
+import org.koin.android.ext.koin.androidContext
+import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.parameter.parametersOf
-import org.koin.dsl.module.module
+import org.koin.dsl.module
 
 val uiModule = module {
     viewModel { MainViewModel() }
@@ -33,5 +33,5 @@ val networkModule = module {
 }
 
 val managerModule = module {
-    factory<SharedPreferencesManager> { SharedPreferencesManagerImpl(androidApplication()) }
+    factory<SharedPreferencesManager> { SharedPreferencesManagerImpl(androidContext()) }
 }

@@ -11,7 +11,7 @@ import androidx.databinding.ViewDataBinding
 import com.bumptech.glide.Glide
 import com.android.code.R
 import com.android.code.ui.views.progress.LoadingDialog
-import org.koin.androidx.viewmodel.ext.android.getViewModelByClass
+import org.koin.androidx.viewmodel.ext.android.getViewModel
 import timber.log.Timber
 
 abstract class BaseActivity<T : ViewDataBinding, F : BaseViewModel> : AppCompatActivity() {
@@ -29,7 +29,7 @@ abstract class BaseActivity<T : ViewDataBinding, F : BaseViewModel> : AppCompatA
     @Suppress("UNCHECKED_CAST")
     private fun createViewModel(): F =
         (javaClass.getAnnotation(RequiresActivityViewModel::class.java)?.let {
-            getViewModelByClass(it.value)
+            getViewModel(clazz = it.value)
         } ?: throw RuntimeException()) as F
 
     private val loadingDialog by lazy {
