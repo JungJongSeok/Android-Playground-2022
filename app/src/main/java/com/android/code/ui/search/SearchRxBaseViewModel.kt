@@ -83,7 +83,7 @@ class SearchRxBaseViewModel(private val marvelRepository: MarvelRxRepository) :
             }, _error)
     }
 
-    private var searchLock = PublishSubject.create<Unit>()
+    private var searchLock = PublishSubject.create<Boolean>()
     override fun search(text: String, isRefreshing: Boolean) {
         val isLock = if (isRefreshing) {
             _refreshedSwipeRefreshLayout
@@ -93,7 +93,7 @@ class SearchRxBaseViewModel(private val marvelRepository: MarvelRxRepository) :
         if (isLock?.value == true) {
             return
         }
-        searchLock.onNext(Unit)
+        searchLock.onNext(true)
         initSearchData()
         currentText = text
         if (text.isEmpty()) {
