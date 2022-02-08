@@ -5,6 +5,7 @@ import com.android.code.repository.MarvelRxRepository
 import com.android.code.ui.BaseViewModel
 import com.android.code.util.empty
 import com.android.code.util.livedata.SafetyMutableLiveData
+import io.reactivex.rxjava3.kotlin.addTo
 import io.reactivex.rxjava3.subjects.PublishSubject
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.cancellation.CancellationException
@@ -80,7 +81,7 @@ class SearchRxBaseViewModel(private val marvelRepository: MarvelRxRepository) :
                 initializeOffset = currentOffset
                 initializeTotal = currentTotal
                 _responseData.setValueSafety(totalList to true)
-            }, _error)
+            }, _error).addTo(compositeDisposable)
     }
 
     private var searchLock = PublishSubject.create<Boolean>()
@@ -140,7 +141,7 @@ class SearchRxBaseViewModel(private val marvelRepository: MarvelRxRepository) :
                     return@subscribe
                 }
                 _error.setValueSafety(it)
-            })
+            }).addTo(compositeDisposable)
     }
 
     override fun canSearchMore(): Boolean {
@@ -166,7 +167,7 @@ class SearchRxBaseViewModel(private val marvelRepository: MarvelRxRepository) :
                 val totalList = (_responseData.value?.first ?: emptyList()) + searchDataList
 
                 _responseData.setValueSafety(totalList to false)
-            }, _error)
+            }, _error).addTo(compositeDisposable)
     }
 
     private fun initSearchData() {
