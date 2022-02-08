@@ -70,17 +70,17 @@ internal class SearchBaseViewModelTest {
                 searchBaseViewModel.search("")
                 assertEquals(searchBaseViewModel.searchedText.getOrAwaitValue(), "")
                 searchBaseViewModel.search("spi")
+                delay(100)
                 searchBaseViewModel.search("spider")
                 assertEquals(searchBaseViewModel.searchedText.getOrAwaitValue(), "")
                 delay(500)
                 assertEquals(searchBaseViewModel.searchedText.getOrAwaitValue(), "spider")
                 searchBaseViewModel.search("spider-m")
+                delay(100)
                 assertEquals(searchBaseViewModel.searchedText.getOrAwaitValue(), "spider")
                 searchBaseViewModel.search("spider-man")
                 delay(500)
                 assertEquals(searchBaseViewModel.searchedText.getOrAwaitValue(), "spider-man")
-                assertEquals(searchBaseViewModel.getPreferencesRecentSearchList(),
-                    listOf("spider-man", "spider", "123", "456", "789"))
             }
 
             println("search() Total Time: $totalExecutionTime")
