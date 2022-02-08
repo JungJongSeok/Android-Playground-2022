@@ -167,9 +167,10 @@ dependencies {
     debugImplementation "com.facebook.flipper:flipper-network-plugin:$flipper_version"
 
     // koin
-    def koin_version = "1.0.2"
-    implementation "org.koin:koin-androidx-scope:$koin_version"
-    implementation "org.koin:koin-androidx-viewmodel:$koin_version"
+    def koin_version = "3.1.5"
+    implementation "io.insert-koin:koin-core:$koin_version"
+    implementation "io.insert-koin:koin-android:$koin_version"
+    implementation "io.insert-koin:koin-android-compat:$koin_version"
 
     // lottie
     implementation 'com.airbnb.android:lottie:3.7.1'
