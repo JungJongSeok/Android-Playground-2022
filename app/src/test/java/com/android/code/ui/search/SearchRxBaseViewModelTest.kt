@@ -6,10 +6,11 @@ import com.android.code.getOrAwaitValue
 import com.android.code.models.BaseResponse
 import com.android.code.models.marvel.MarvelResult
 import com.android.code.models.marvel.SampleResponse
-import com.android.code.repository.MarvelRepository
 import com.android.code.repository.MarvelRxRepository
 import io.reactivex.rxjava3.core.Single
-import kotlinx.coroutines.*
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -41,7 +42,7 @@ internal class SearchRxBaseViewModelTest {
                 offset: Int,
                 limit: Int,
             ): Single<BaseResponse<SampleResponse>> {
-                return Single.just(BaseResponse(sampleResponse))
+                return Single.fromCallable { BaseResponse(sampleResponse) }
             }
 
             override var recentList: List<String>? = listOf("123", "456", "789")
@@ -72,13 +73,13 @@ internal class SearchRxBaseViewModelTest {
                 searchBaseViewModel.search("")
                 assertEquals(searchBaseViewModel.searchedText.getOrAwaitValue(), "")
                 searchBaseViewModel.search("spi")
-                delay(100)
+                delay(1)
                 searchBaseViewModel.search("spider")
                 assertEquals(searchBaseViewModel.searchedText.getOrAwaitValue(), "")
                 delay(500)
                 assertEquals(searchBaseViewModel.searchedText.getOrAwaitValue(), "spider")
                 searchBaseViewModel.search("spider-m")
-                delay(100)
+                delay(1)
                 assertEquals(searchBaseViewModel.searchedText.getOrAwaitValue(), "spider")
                 searchBaseViewModel.search("spider-man")
                 delay(500)
