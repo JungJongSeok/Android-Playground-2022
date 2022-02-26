@@ -18,7 +18,9 @@ interface MarvelRxRepository {
         limit: Int = 20,
     ): Single<BaseResponse<SampleResponse>>
 
-    var recentList: List<String>?
+    fun setRecentList(recentList: List<String>): Single<Unit>
+
+    fun getRecentList(): Single<List<String>>
 }
 
 class MarvelRxRepositoryImpl(
@@ -43,12 +45,14 @@ class MarvelRxRepositoryImpl(
         }
             .subscribeOn(Schedulers.io())
             .flatMap { (timestamp, hash, nameStarts) ->
-                marvelService.charactersRx(nameStarts,
+                marvelService.charactersRx(
+                    nameStarts,
                     offset,
                     limit,
                     BuildConfig.MARVEL_PUBLIC_KEY,
                     timestamp,
-                    hash)
+                    hash
+                )
             }
     }
 
@@ -62,17 +66,22 @@ class MarvelRxRepositoryImpl(
         }.subscribeOn(Schedulers.io())
     }
 
-    override var recentList: List<String>?
-        get() {
-            return when (type) {
+    override fun setRecentList(recentList: List<String>): Single<Unit> {
+        return Single.fromCallable {
+            when (type) {
+                SearchType.GRID -> sharedPreferencesManager.recentGridSearchList = recentList
+                SearchType.STAGGERED -> sharedPreferencesManager.recentStaggeredSearchList =
+                    recentList
+            }
+        }.subscribeOn(Schedulers.computation())
+    }
+
+    override fun getRecentList(): Single<List<String>> {
+        return Single.fromCallable {
+            when (type) {
                 SearchType.GRID -> sharedPreferencesManager.recentGridSearchList
                 SearchType.STAGGERED -> sharedPreferencesManager.recentStaggeredSearchList
-            }
-        }
-        set(value) {
-            when (type) {
-                SearchType.GRID -> sharedPreferencesManager.recentGridSearchList = value
-                SearchType.STAGGERED -> sharedPreferencesManager.recentStaggeredSearchList = value
-            }
-        }
+            } ?: emptyList()
+        }.subscribeOn(Schedulers.computation())
+    }
 }

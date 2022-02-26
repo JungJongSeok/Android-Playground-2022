@@ -5,7 +5,9 @@ import com.android.code.repository.MarvelRxRepository
 import com.android.code.ui.BaseViewModel
 import com.android.code.util.empty
 import com.android.code.util.livedata.SafetyMutableLiveData
+import com.android.code.util.zipToPair
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.kotlin.addTo
 import io.reactivex.rxjava3.subjects.PublishSubject
 import java.util.concurrent.TimeUnit
@@ -61,11 +63,16 @@ class SearchRxBaseViewModel(private val marvelRepository: MarvelRxRepository) :
         }
         initSearchData()
         marvelRepository.charactersRx()
+            .flatMap {
+                Single.zip(
+                    Single.just(it),
+                    marvelRepository.getRecentList(), zipToPair()
+                )
+            }
             .observeOn(AndroidSchedulers.mainThread())
             .doFinally { isLock.setValueSafety(false) }
-            .subscribe({ response ->
-                val recentSearchList =
-                    getPreferencesRecentSearchList()?.run { SearchRecentData(this) }
+            .subscribe({ (response, recentList) ->
+                val recentSearchList = recentList?.run { SearchRecentData(this) }
                 val searchDataList = response.data
                     .apply {
                         currentOffset = count
@@ -100,30 +107,43 @@ class SearchRxBaseViewModel(private val marvelRepository: MarvelRxRepository) :
         initSearchData()
         currentText = text
         if (text.isEmpty()) {
-            val recentSearchList =
-                getPreferencesRecentSearchList()?.run { SearchRecentData(this) }
-            val totalList = if (recentSearchList != null) {
-                listOf(recentSearchList) + initializeDataList
-            } else {
-                initializeDataList
-            }
-            currentOffset = initializeOffset
-            currentTotal = initializeTotal
-            _searchedText.setValueSafety(String.empty())
-            _responseData.setValueSafety(totalList to true)
+            marvelRepository.getRecentList()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ recentList ->
+                    val recentSearchList = recentList.run { SearchRecentData(this) }
+                    val totalList = if (recentSearchList.recentList.isNotEmpty()) {
+                        listOf(recentSearchList) + initializeDataList
+                    } else {
+                        initializeDataList
+                    }
+                    currentOffset = initializeOffset
+                    currentTotal = initializeTotal
+                    _searchedText.setValueSafety(String.empty())
+                    _responseData.setValueSafety(totalList to true)
+                }, _error)
             return
         }
         marvelRepository.charactersRx(nameStartsWith = text)
             .takeUntil(searchLock.firstElement().toFlowable())
             .delay(300, TimeUnit.MILLISECONDS)
+            .flatMap {
+                Single.zip(
+                    Single.just(it),
+                    marvelRepository.getRecentList()
+                        .flatMap { recentList ->
+                            val list = (listOf(text) + (recentList ?: emptyList())).distinct()
+                            Single.zip(
+                                Single.just(list),
+                                marvelRepository.setRecentList(list),
+                                zipToPair()
+                            )
+                        }.map { (recentList, _) -> recentList }, zipToPair()
+                )
+            }
             .observeOn(AndroidSchedulers.mainThread())
             .doFinally { isLock?.setValueSafety(false) }
-            .subscribe({ response ->
-                marvelRepository.recentList =
-                    (listOf(text) + (getPreferencesRecentSearchList()
-                        ?: emptyList())).distinct()
-                val recentSearchList =
-                    getPreferencesRecentSearchList()?.run { SearchRecentData(this) }
+            .subscribe({ (response, recentList) ->
+                val recentSearchList = recentList.run { SearchRecentData(this) }
                 val searchDataList = response.data
                     .apply {
                         currentOffset = count
@@ -131,7 +151,7 @@ class SearchRxBaseViewModel(private val marvelRepository: MarvelRxRepository) :
                     }.results?.map { SearchBaseData(it) }
                     ?: emptyList()
 
-                val totalList = if (recentSearchList != null) {
+                val totalList = if (recentSearchList.recentList.isNotEmpty()) {
                     listOf(recentSearchList) + searchDataList
                 } else {
                     searchDataList
@@ -181,13 +201,19 @@ class SearchRxBaseViewModel(private val marvelRepository: MarvelRxRepository) :
     }
 
     override fun removeRecentSearch(text: String) {
-        val recentSearchList = getPreferencesRecentSearchList()?.filter { it != text }
-        marvelRepository.recentList = recentSearchList
-        if (recentSearchList.isNullOrEmpty()) {
-            val previousDataList =
-                _responseData.value?.first?.filterIsInstance<SearchBaseData>() ?: emptyList()
-            _responseData.setValueSafety(previousDataList to true)
-        }
+        marvelRepository.getRecentList()
+            .flatMap { recentList ->
+                val list = recentList.filter { it != text }
+                Single.zip(Single.just(list), marvelRepository.setRecentList(list), zipToPair())
+            }
+            .map { (recentList, _) -> recentList }
+            .subscribe({ recentSearchList->
+                if (recentSearchList.isNullOrEmpty()) {
+                    val previousDataList =
+                        _responseData.value?.first?.filterIsInstance<SearchBaseData>() ?: emptyList()
+                    _responseData.setValueSafety(previousDataList to true)
+                }
+            }, _error).addTo(compositeDisposable)
     }
 
     override fun clickData(searchData: SearchData) {
@@ -195,10 +221,6 @@ class SearchRxBaseViewModel(private val marvelRepository: MarvelRxRepository) :
         if (searchData is SearchBaseData) {
             _searchedData.setValueSafety(searchData)
         }
-    }
-
-    override fun getPreferencesRecentSearchList(): List<String>? {
-        return marvelRepository.recentList
     }
 }
 
@@ -209,7 +231,6 @@ interface SearchRxViewModelInput {
     fun searchMore()
     fun removeRecentSearch(text: String)
     fun clickData(searchData: SearchData)
-    fun getPreferencesRecentSearchList(): List<String>?
 }
 
 interface SearchRxViewModelOutput {

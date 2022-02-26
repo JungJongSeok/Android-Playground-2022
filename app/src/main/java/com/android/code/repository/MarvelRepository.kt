@@ -18,7 +18,9 @@ interface MarvelRepository {
         limit: Int = 20,
     ): BaseResponse<SampleResponse>
 
-    var recentList: List<String>?
+    suspend fun setRecentList(recentList: List<String>)
+
+    suspend fun getRecentList(): List<String>
 }
 
 class MarvelRepositoryImpl(
@@ -56,17 +58,21 @@ class MarvelRepositoryImpl(
         }
     }
 
-    override var recentList: List<String>?
-        get() {
-            return when (type) {
+    override suspend fun setRecentList(recentList: List<String>) {
+        withContext(Dispatchers.IO) {
+            when (type) {
+                SearchType.GRID -> sharedPreferencesManager.recentGridSearchList = recentList
+                SearchType.STAGGERED -> sharedPreferencesManager.recentStaggeredSearchList = recentList
+            }
+        }
+    }
+
+    override suspend fun getRecentList(): List<String> {
+        return withContext(Dispatchers.IO) {
+            when (type) {
                 SearchType.GRID -> sharedPreferencesManager.recentGridSearchList
                 SearchType.STAGGERED -> sharedPreferencesManager.recentStaggeredSearchList
-            }
+            } ?: emptyList()
         }
-        set(value) {
-            when (type) {
-                SearchType.GRID -> sharedPreferencesManager.recentGridSearchList = value
-                SearchType.STAGGERED -> sharedPreferencesManager.recentStaggeredSearchList = value
-            }
-        }
+    }
 }
