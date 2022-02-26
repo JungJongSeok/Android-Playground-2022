@@ -7,10 +7,18 @@ import com.android.code.models.BaseResponse
 import com.android.code.models.marvel.MarvelResult
 import com.android.code.models.marvel.SampleResponse
 import com.android.code.repository.MarvelRxRepository
+import io.reactivex.rxjava3.android.plugins.RxAndroidPlugins
+import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.core.Single
+import io.reactivex.rxjava3.disposables.Disposable
+import io.reactivex.rxjava3.internal.schedulers.ExecutorScheduler
+import io.reactivex.rxjava3.internal.schedulers.TrampolineScheduler
+import io.reactivex.rxjava3.plugins.RxJavaPlugins
+import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -18,6 +26,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
+import java.util.concurrent.TimeUnit
 import kotlin.system.measureTimeMillis
 
 @kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -28,6 +37,14 @@ internal class SearchRxBaseViewModelTest {
 
     @BeforeEach
     fun setUp() {
+        val immediate: Scheduler = Schedulers.io()
+
+        RxJavaPlugins.setInitIoSchedulerHandler { immediate }
+        RxJavaPlugins.setInitComputationSchedulerHandler { immediate }
+        RxJavaPlugins.setInitNewThreadSchedulerHandler { immediate }
+        RxJavaPlugins.setInitSingleSchedulerHandler { immediate }
+        RxAndroidPlugins.setInitMainThreadSchedulerHandler { immediate }
+
         val marvelResult: MarvelResult = mock {
             on { id } doReturn 1
         }
@@ -100,6 +117,7 @@ internal class SearchRxBaseViewModelTest {
                     assertEquals(searchBaseViewModel.responseData.getOrAwaitValue().first.size, 4)
                     delay(500)
                     searchBaseViewModel.searchMore()
+                    delay(1)
                     assertEquals(searchBaseViewModel.responseData.getOrAwaitValue().first.size, 7)
                 }
 
@@ -115,6 +133,7 @@ internal class SearchRxBaseViewModelTest {
             val totalExecutionTime = measureTimeMillis {
                 assertEquals(searchBaseViewModel.canSearchMore(), false)
                 searchBaseViewModel.initData()
+                delay(1)
                 assertEquals(searchBaseViewModel.canSearchMore(), true)
             }
 
@@ -147,5 +166,11 @@ internal class SearchRxBaseViewModelTest {
 
             println("clickData() Total Time: $totalExecutionTime")
         }
+    }
+
+    @AfterEach
+    fun done() {
+        RxJavaPlugins.reset()
+        RxAndroidPlugins.reset()
     }
 }
