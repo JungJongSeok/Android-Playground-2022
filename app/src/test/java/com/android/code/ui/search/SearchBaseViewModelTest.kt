@@ -23,6 +23,7 @@ import kotlin.system.measureTimeMillis
 internal class SearchBaseViewModelTest {
     private lateinit var searchBaseViewModel: SearchBaseViewModel
 
+    private val recentList = mutableListOf("123", "456", "789")
     @BeforeEach
     fun setUp() {
         val marvelResult: MarvelResult = mock {
@@ -42,8 +43,14 @@ internal class SearchBaseViewModelTest {
                 return BaseResponse(sampleResponse)
             }
 
-            override var recentList: List<String>? = listOf("123", "456", "789")
+            override suspend fun setRecentList(recentList: List<String>) {
+                this@SearchBaseViewModelTest.recentList.clear()
+                this@SearchBaseViewModelTest.recentList.addAll(recentList)
+            }
 
+            override suspend fun getRecentList(): List<String> {
+                return recentList
+            }
         }
         searchBaseViewModel = SearchBaseViewModel(marvelRepository)
     }
@@ -125,7 +132,7 @@ internal class SearchBaseViewModelTest {
         runBlocking {
             val totalExecutionTime = measureTimeMillis {
                 searchBaseViewModel.removeRecentSearch("123")
-                assertEquals(searchBaseViewModel.getPreferencesRecentSearchList()?.size, 2)
+                assertEquals(recentList, listOf("456", "789"))
             }
 
             println("removeRecentSearch() Total Time: $totalExecutionTime")
