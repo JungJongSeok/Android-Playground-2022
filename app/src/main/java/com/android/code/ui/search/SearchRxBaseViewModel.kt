@@ -5,6 +5,7 @@ import com.android.code.repository.MarvelRxRepository
 import com.android.code.ui.BaseViewModel
 import com.android.code.util.empty
 import com.android.code.util.livedata.SafetyMutableLiveData
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.kotlin.addTo
 import io.reactivex.rxjava3.subjects.PublishSubject
 import java.util.concurrent.TimeUnit
@@ -60,6 +61,7 @@ class SearchRxBaseViewModel(private val marvelRepository: MarvelRxRepository) :
         }
         initSearchData()
         marvelRepository.charactersRx()
+            .observeOn(AndroidSchedulers.mainThread())
             .doFinally { isLock.setValueSafety(false) }
             .subscribe({ response ->
                 val recentSearchList =
@@ -114,6 +116,7 @@ class SearchRxBaseViewModel(private val marvelRepository: MarvelRxRepository) :
         marvelRepository.charactersRx(nameStartsWith = text)
             .takeUntil(searchLock.firstElement().toFlowable())
             .delay(300, TimeUnit.MILLISECONDS)
+            .observeOn(AndroidSchedulers.mainThread())
             .doFinally { isLock?.setValueSafety(false) }
             .subscribe({ response ->
                 marvelRepository.recentList =
@@ -157,6 +160,7 @@ class SearchRxBaseViewModel(private val marvelRepository: MarvelRxRepository) :
             nameStartsWith = currentText,
             offset = currentOffset
         )
+            .observeOn(AndroidSchedulers.mainThread())
             .doFinally { _loading.setValueSafety(false) }
             .subscribe({ response ->
                 val searchDataList = response.data.apply {
