@@ -21,7 +21,6 @@ android {
         targetSdkVersion 31
         versionCode dateCode
         versionName date
-        multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -125,14 +124,6 @@ dependencies {
     implementation "io.reactivex.rxjava3:rxjava:3.0.6"
     implementation "io.reactivex.rxjava3:rxandroid:3.0.0"
     implementation "io.reactivex.rxjava3:rxkotlin:3.0.1"
-
-    // Auth Number
-    implementation 'com.google.android.gms:play-services-auth:20.0.1'
-    implementation 'com.google.android.gms:play-services-auth-api-phone:18.0.1'
-
-    // multidex
-    def multidex_version = "2.0.1"
-    implementation "androidx.multidex:multidex:$multidex_version"
 
     // retrofit
     def retrofit2_version = "2.9.0"
