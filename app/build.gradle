@@ -21,7 +21,6 @@ android {
         targetSdkVersion 31
         versionCode dateCode
         versionName date
-        multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -126,14 +125,6 @@ dependencies {
     implementation "io.reactivex.rxjava3:rxandroid:3.0.0"
     implementation "io.reactivex.rxjava3:rxkotlin:3.0.1"
 
-    // Auth Number
-    implementation 'com.google.android.gms:play-services-auth:20.0.1'
-    implementation 'com.google.android.gms:play-services-auth-api-phone:18.0.1'
-
-    // multidex
-    def multidex_version = "2.0.1"
-    implementation "androidx.multidex:multidex:$multidex_version"
-
     // retrofit
     def retrofit2_version = "2.9.0"
     implementation "com.squareup.retrofit2:retrofit:$retrofit2_version"
@@ -162,7 +153,7 @@ dependencies {
 
     // Flipper
     def flipper_version = "0.96.1"
-    debugImplementation "com.facebook.fresco:fresco:2.0.0"
+    debugImplementation "com.facebook.fresco:fresco:2.0.0" // for flipper image debug plug in
     debugImplementation "com.facebook.flipper:flipper:$flipper_version"
     debugImplementation "com.facebook.flipper:flipper-network-plugin:$flipper_version"
 

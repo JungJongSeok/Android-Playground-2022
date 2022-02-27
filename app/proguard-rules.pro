@@ -19,19 +19,3 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
-
-
-# deep link
--keep interface com.airbnb.deeplinkdispatch.DeepLink
--keepclasseswithmembers class * {
-    @com.airbnb.deeplinkdispatch.DeepLink <methods>;
-}
-
--keep interface com.android.code.deeplink.*
--keepclasseswithmembers class * {
-    @com.android.code.deeplink.* <methods>;
-}
-
-# Apps Flyer
--keep public class com.android.installreferrer.** { *; }
--keep class com.appsflyer.** { *; }
