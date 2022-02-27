@@ -30,7 +30,7 @@ import java.util.concurrent.TimeUnit
 import kotlin.system.measureTimeMillis
 
 @kotlinx.coroutines.ExperimentalCoroutinesApi
-@DisplayName("SearchBaseViewModel 테스트")
+@DisplayName("SearchRxBaseViewModel 테스트")
 @ExtendWith(InstantExecutorExtension::class, CoroutinesTestExtension::class)
 internal class SearchRxBaseViewModelTest {
     private lateinit var searchBaseViewModel: SearchRxBaseViewModel
@@ -126,7 +126,7 @@ internal class SearchRxBaseViewModelTest {
                     assertEquals(searchBaseViewModel.responseData.getOrAwaitValue().first.size, 4)
                     delay(500)
                     searchBaseViewModel.searchMore()
-                    delay(1)
+                    delay(500)
                     assertEquals(searchBaseViewModel.responseData.getOrAwaitValue().first.size, 7)
                 }
 
@@ -142,7 +142,7 @@ internal class SearchRxBaseViewModelTest {
             val totalExecutionTime = measureTimeMillis {
                 assertEquals(searchBaseViewModel.canSearchMore(), false)
                 searchBaseViewModel.initData()
-                delay(1)
+                delay(500)
                 assertEquals(searchBaseViewModel.canSearchMore(), true)
             }
 
