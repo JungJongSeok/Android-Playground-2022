@@ -2,6 +2,7 @@ package com.android.code.ui
 
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.annotation.ColorInt
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
@@ -11,10 +12,9 @@ import androidx.databinding.ViewDataBinding
 import com.bumptech.glide.Glide
 import com.android.code.R
 import com.android.code.ui.views.progress.LoadingDialog
-import org.koin.androidx.viewmodel.ext.android.getViewModel
 import timber.log.Timber
 
-abstract class BaseActivity<T : ViewDataBinding, F : BaseViewModel> : AppCompatActivity() {
+abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
 
     @LayoutRes
     abstract fun getLayoutResId(): Int
@@ -22,15 +22,6 @@ abstract class BaseActivity<T : ViewDataBinding, F : BaseViewModel> : AppCompatA
     protected val binding: T by lazy {
         DataBindingUtil.setContentView(this, getLayoutResId()) as T
     }
-
-    protected val viewModel: F
-        get() = createViewModel()
-
-    @Suppress("UNCHECKED_CAST")
-    private fun createViewModel(): F =
-        (javaClass.getAnnotation(RequiresActivityViewModel::class.java)?.let {
-            getViewModel(clazz = it.value)
-        } ?: throw RuntimeException()) as F
 
     private val loadingDialog by lazy {
         LoadingDialog(this)
@@ -47,14 +38,6 @@ abstract class BaseActivity<T : ViewDataBinding, F : BaseViewModel> : AppCompatA
         super.onCreate(savedInstanceState)
         setTransition(isEnter = true)
         callAbstractFunc(savedInstanceState)
-
-        viewModel.loading.observe(this) { isShow ->
-            if (isShow) {
-                loadingDialog.show()
-            } else {
-                loadingDialog.dismiss()
-            }
-        }
     }
 
     override fun finish() {

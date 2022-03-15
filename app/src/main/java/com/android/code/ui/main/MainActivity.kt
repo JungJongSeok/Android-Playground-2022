@@ -6,20 +6,20 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.annotation.IntDef
 import androidx.core.animation.doOnEnd
 import com.android.code.R
 import com.android.code.databinding.ActivityMainBinding
 import com.android.code.ui.BaseActivity
-import com.android.code.ui.RequiresActivityViewModel
 import com.android.code.ui.search.SearchGridFragment
 import com.android.code.ui.search.SearchStaggeredFragment
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import dagger.hilt.android.AndroidEntryPoint
 
-
-@RequiresActivityViewModel(value = MainViewModel::class)
-class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
+@AndroidEntryPoint
+class MainActivity : BaseActivity<ActivityMainBinding>() {
     companion object {
         const val PAGE_GRID = 0
         const val PAGE_STAGGERED = 1
@@ -28,6 +28,8 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
             context.startActivity(Intent(context, MainActivity::class.java))
         }
     }
+
+    private val viewModel: MainViewModel by viewModels()
 
     @IntDef(PAGE_GRID, PAGE_STAGGERED)
     @Retention(AnnotationRetention.SOURCE)

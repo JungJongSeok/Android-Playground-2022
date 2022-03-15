@@ -6,14 +6,17 @@ import com.android.code.ui.BaseViewModel
 import com.android.code.util.empty
 import com.android.code.util.livedata.SafetyMutableLiveData
 import com.android.code.util.zipToPair
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.kotlin.addTo
 import io.reactivex.rxjava3.subjects.PublishSubject
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 import kotlin.coroutines.cancellation.CancellationException
 
-class SearchRxBaseViewModel(private val marvelRepository: MarvelRxRepository) :
+@HiltViewModel
+class SearchRxBaseViewModel @Inject constructor(private val marvelRepository: MarvelRxRepository) :
     BaseViewModel(),
     SearchRxViewModelInput, SearchRxViewModelOutput {
 

@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,10 +18,10 @@ import com.android.code.ui.main.MainViewModel
 import com.android.code.ui.views.CommonSwipeRefreshLayout
 import com.android.code.util.empty
 import com.bumptech.glide.RequestManager
-import org.koin.android.ext.android.inject
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import org.koin.core.parameter.parametersOf
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class SearchGridFragment : BaseFragment<FragmentSearchGridBinding>(),
     CommonSwipeRefreshLayout.OnRefreshListener {
     companion object {
@@ -28,8 +30,8 @@ class SearchGridFragment : BaseFragment<FragmentSearchGridBinding>(),
         private const val GRID_SPAN_COUNT = 2
     }
 
-    private val viewModel: SearchBaseViewModel by inject { parametersOf(SearchType.GRID) }
-    private val mainViewModel: MainViewModel by sharedViewModel()
+    private val viewModel: SearchBaseViewModel by viewModels()
+    private val mainViewModel: MainViewModel by activityViewModels()
 
     private val adapter by lazy {
         SearchAdapter(object : SearchAdapterProperty {
