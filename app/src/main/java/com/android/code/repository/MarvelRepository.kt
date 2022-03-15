@@ -9,6 +9,7 @@ import com.android.code.util.SharedPreferencesManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.security.MessageDigest
+import javax.inject.Inject
 
 
 interface MarvelRepository {
@@ -23,11 +24,12 @@ interface MarvelRepository {
     suspend fun getRecentList(): List<String>
 }
 
-class MarvelRepositoryImpl(
+class MarvelRepositoryImpl  @Inject constructor(
     private val marvelService: MarvelService,
     private val sharedPreferencesManager: SharedPreferencesManager,
     private val type: SearchType
 ) : MarvelRepository {
+
     override suspend fun characters(
         nameStartsWith: String?,
         offset: Int,

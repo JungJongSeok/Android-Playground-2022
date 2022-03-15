@@ -6,9 +6,12 @@ import com.android.code.models.BaseResponse
 import com.android.code.models.marvel.SampleResponse
 import com.android.code.ui.search.SearchType
 import com.android.code.util.SharedPreferencesManager
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
 import java.security.MessageDigest
+import javax.inject.Inject
 
 
 interface MarvelRxRepository {
@@ -23,7 +26,7 @@ interface MarvelRxRepository {
     fun getRecentList(): Single<List<String>>
 }
 
-class MarvelRxRepositoryImpl(
+class MarvelRxRepositoryImpl @Inject constructor(
     private val marvelService: MarvelService,
     private val sharedPreferencesManager: SharedPreferencesManager,
     private val type: SearchType,

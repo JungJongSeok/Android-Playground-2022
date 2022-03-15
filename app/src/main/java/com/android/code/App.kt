@@ -1,28 +1,13 @@
 package com.android.code
 
 import android.app.Application
-import com.android.code.lib.koin.managerModule
-import com.android.code.lib.koin.networkModule
-import com.android.code.lib.koin.repositoryModule
-import com.android.code.lib.koin.uiModule
 import com.android.code.util.FlipperModule
 import com.android.code.util.StethoModule
-import org.koin.android.ext.koin.androidContext
-import org.koin.core.context.startKoin
+import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
-
+@HiltAndroidApp
 class App : Application() {
-
-    private val appModule by lazy {
-        listOf(
-            uiModule,
-            repositoryModule,
-            networkModule,
-            managerModule
-        )
-    }
-
 
     companion object {
         lateinit var instance: App
@@ -34,11 +19,6 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-
-        startKoin {
-            androidContext(applicationContext)
-            modules(appModule)
-        }
 
         if (BuildConfig.DEBUG) {
             // Timber Initialize

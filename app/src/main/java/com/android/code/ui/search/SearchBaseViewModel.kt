@@ -5,12 +5,15 @@ import com.android.code.repository.MarvelRepository
 import com.android.code.ui.BaseViewModel
 import com.android.code.util.empty
 import com.android.code.util.livedata.SafetyMutableLiveData
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
+import javax.inject.Inject
 import kotlin.coroutines.cancellation.CancellationException
 
-class SearchBaseViewModel(private val marvelRepository: MarvelRepository) :
+@HiltViewModel
+class SearchBaseViewModel @Inject constructor(private val marvelRepository: MarvelRepository) :
     BaseViewModel(),
     SearchViewModelInput, SearchViewModelOutput {
 
