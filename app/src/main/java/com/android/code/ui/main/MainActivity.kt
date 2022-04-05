@@ -8,15 +8,23 @@ import android.os.Build
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.annotation.IntDef
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.animation.doOnEnd
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.window.layout.FoldingFeature
+import androidx.window.layout.WindowInfoTracker
 import com.android.code.R
 import com.android.code.databinding.ActivityMainBinding
 import com.android.code.ui.BaseActivity
 import com.android.code.ui.search.SearchGridFragment
 import com.android.code.ui.search.SearchStaggeredFragment
+import com.android.code.util.FoldUtils
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>() {
@@ -62,6 +70,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     override fun getLayoutResId(): Int = R.layout.activity_main
 
     override fun initView(savedInstanceState: Bundle?) {
+        binding.lifecycleOwner = this
+        binding.requestManager = requestManager
+        binding.viewModel = viewModel
+
         binding.pager.adapter = tabAdapter
 
         mediator.attach()
@@ -88,6 +100,30 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             setCurrentItem(selectPosition)
         }
         setSplashScreen()
+
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                WindowInfoTracker.getOrCreate(this@MainActivity).windowLayoutInfo(this@MainActivity)
+                    .collect { newLayoutInfo ->
+                        // Add views that represent display features
+                        for (displayFeature in newLayoutInfo.displayFeatures) {
+                            val foldFeature = displayFeature as? FoldingFeature
+                            if (foldFeature != null) {
+                                if (foldFeature.orientation != FoldingFeature.Orientation.HORIZONTAL) {
+                                    return@collect
+                                }
+                                if (foldFeature.isSeparating) {
+                                    // The foldable device is in tabletop mode
+                                    val fold = FoldUtils.foldPosition(binding.motionLayout, foldFeature)
+                                    ConstraintLayout.getSharedValues().fireNewValue(binding.fold.id, fold)
+                                } else {
+                                    ConstraintLayout.getSharedValues().fireNewValue(binding.fold.id, 0)
+                                }
+                            }
+                        }
+                    }
+            }
+        }
     }
 
     @TargetApi(Build.VERSION_CODES.S)

@@ -47,11 +47,12 @@ class SearchStaggeredFragment : BaseFragment<FragmentSearchStaggeredBinding>(),
             }
 
             override fun removeRecentSearch(text: String) {
-                viewModel.removeRecentSearch(text)
+                viewModel.inputs.removeRecentSearch(text)
             }
 
             override fun clickData(searchData: SearchData) {
-                viewModel.clickData(searchData)
+                viewModel.inputs.clickData(searchData)
+                mainViewModel.inputs.clickData(searchData)
             }
         })
     }
