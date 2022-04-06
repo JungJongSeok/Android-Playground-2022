@@ -9,10 +9,9 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.annotation.IntDef
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.animation.doOnEnd
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
+import androidx.lifecycle.*
 import androidx.window.layout.FoldingFeature
 import androidx.window.layout.WindowInfoTracker
 import com.android.code.R
@@ -21,6 +20,7 @@ import com.android.code.ui.BaseActivity
 import com.android.code.ui.search.SearchGridFragment
 import com.android.code.ui.search.SearchStaggeredFragment
 import com.android.code.util.FoldUtils
+import com.android.code.util.KeyboardVisibilityUtils
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
@@ -67,12 +67,26 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         }
     }
 
+    private val keyboardUtil by lazy {
+        KeyboardVisibilityUtils(window, onShowKeyboard = {
+            lifecycleScope.launch {
+                setFoldKeyboardUI()
+            }
+        }, onHideKeyboard = {
+            lifecycleScope.launch {
+                setFoldKeyboardUI()
+            }
+        })
+    }
+
     override fun getLayoutResId(): Int = R.layout.activity_main
 
     override fun initView(savedInstanceState: Bundle?) {
         binding.lifecycleOwner = this
         binding.requestManager = requestManager
         binding.viewModel = viewModel
+
+        lifecycle.addObserver(keyboardUtil.lifecycleObserver)
 
         binding.pager.adapter = tabAdapter
 
@@ -103,27 +117,30 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                WindowInfoTracker.getOrCreate(this@MainActivity).windowLayoutInfo(this@MainActivity)
-                    .collect { newLayoutInfo ->
-                        // Add views that represent display features
-                        for (displayFeature in newLayoutInfo.displayFeatures) {
-                            val foldFeature = displayFeature as? FoldingFeature
-                            if (foldFeature != null) {
-                                if (foldFeature.orientation != FoldingFeature.Orientation.HORIZONTAL) {
-                                    return@collect
-                                }
-                                if (foldFeature.isSeparating) {
-                                    // The foldable device is in tabletop mode
-                                    val fold = FoldUtils.foldPosition(binding.motionLayout, foldFeature)
-                                    ConstraintLayout.getSharedValues().fireNewValue(binding.fold.id, fold)
-                                } else {
-                                    ConstraintLayout.getSharedValues().fireNewValue(binding.fold.id, 0)
-                                }
-                            }
-                        }
-                    }
+                setFoldKeyboardUI()
             }
         }
+    }
+
+    private suspend fun setFoldKeyboardUI() {
+        WindowInfoTracker.getOrCreate(this@MainActivity).windowLayoutInfo(this@MainActivity)
+            .collect { newLayoutInfo ->
+                // Add views that represent display features
+                for (displayFeature in newLayoutInfo.displayFeatures) {
+                    val foldFeature = displayFeature as? FoldingFeature
+                    if (foldFeature != null) {
+                        if (foldFeature.orientation != FoldingFeature.Orientation.HORIZONTAL) {
+                            return@collect
+                        }
+                        val newValue =  if (foldFeature.isSeparating) {
+                            FoldUtils.foldPosition(binding.motionLayout, foldFeature)
+                        } else {
+                            0
+                        }
+                        ConstraintLayout.getSharedValues().fireNewValue(binding.fold.id, newValue)
+                    }
+                }
+            }
     }
 
     @TargetApi(Build.VERSION_CODES.S)

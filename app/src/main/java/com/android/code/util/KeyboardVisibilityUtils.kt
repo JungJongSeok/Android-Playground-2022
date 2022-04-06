@@ -3,6 +3,7 @@ package com.android.code.util
 import android.graphics.Rect
 import android.view.ViewTreeObserver
 import android.view.Window
+import androidx.lifecycle.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -19,6 +20,14 @@ class KeyboardVisibilityUtils(
     companion object {
 
         private const val MIN_KEYBOARD_HEIGHT_PX = 350
+    }
+
+    val lifecycleObserver = LifecycleEventObserver { _, event ->
+        when (event) {
+            Lifecycle.Event.ON_CREATE -> attachKeyboardListeners()
+            Lifecycle.Event.ON_DESTROY -> detachKeyboardListeners()
+            else -> Unit
+        }
     }
 
     override val coroutineContext: CoroutineContext

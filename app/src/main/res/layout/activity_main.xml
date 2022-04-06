@@ -20,6 +20,7 @@
         android:id="@+id/motionLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
         app:layoutDescription="@xml/motion_scene">
 
         <androidx.viewpager2.widget.ViewPager2
@@ -66,6 +67,19 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/fold">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:text="@string/search_fold_device_content"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:visibility="@{viewModel.outputs.clickData == null ? View.VISIBLE : View.INVISIBLE, default = visible}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.cardview.widget.CardView
                 android:layout_width="200dp"

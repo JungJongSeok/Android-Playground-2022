@@ -75,7 +75,12 @@ class SearchRxBaseViewModel @Inject constructor(private val marvelRepository: Ma
             .observeOn(AndroidSchedulers.mainThread())
             .doFinally { isLock.setValueSafety(false) }
             .subscribe({ (response, recentList) ->
-                val recentSearchList = recentList?.run { SearchRecentData(this) }
+                val recentSearchList = recentList?.run {
+                    if (this.isEmpty()) {
+                        null
+                    } else {
+                        SearchRecentData(this)
+                    }}
                 val searchDataList = response.data
                     .apply {
                         currentOffset = count
